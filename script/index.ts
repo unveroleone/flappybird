@@ -27,6 +27,7 @@ let pipeScored: boolean[] = [];
 let createPipeInterval;
 
 createPipeInterval = setInterval(createPipe, 2300);
+let gameLoop = setInterval(update, deltaTime * 100);
 
 function update(): void {
     scoretext.innerHTML = `Score: ${score}`;
@@ -97,7 +98,6 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-let gameLoop = setInterval(update, deltaTime * 100);
 
 function isCollidingWithAny(player: HTMLElement, pipes: HTMLCollectionOf<Element>): boolean {
     for (let i = 0; i < pipes.length; i++) {
@@ -169,14 +169,6 @@ function createPipe() {
     pipeScored.push(false);
 }
 
-<<<<<<< HEAD
-setInterval(() => {
-    createPipe();
-}, 2000);
-=======
-
-
->>>>>>> 6a504937a0fb05bd5fbfad73998fbea14e134f06
 
 //game over
 let gameover = document.getElementById("gameover")!;
@@ -190,5 +182,12 @@ function gameOver(){
 
 
 function restartGame(){
-
+    addEventListener("click", () => {
+        pipeContainers = [];
+        pipeContainerXPositions = [];
+        pipeScored= [];
+        gameLoop = setInterval(update, deltaTime * 100);
+        positionY = 300;
+        gameover.style.opacity = "0";
+    })
 }

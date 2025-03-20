@@ -20,11 +20,10 @@ const pipeholder = document.getElementById("pipe-container");
 const scoretext = document.getElementById("score");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
-setInterval(() => {
-    if (running) {
-        createPipe();
-    }
-}, 2000);
+let pipeScored = [];
+let createPipeInterval;
+createPipeInterval = setInterval(createPipe, 2300);
+let gameLoop = setInterval(update, deltaTime * 100);
 function update() {
     scoretext.innerHTML = `Score: ${score}`;
     velocity += gravity * deltaTime;
@@ -59,7 +58,7 @@ function update() {
             pipeContainerXPositions[i] += speed * deltaTime;
             let pos = pipeContainerXPositions[i];
             pipeContainers[i].style.left = `${pos}px`;
-            if (pipeContainerXPositions[i] <= 50) {
+            if (pipeContainerXPositions[i] <= 50 && pipeScored[i] === false) {
                 pipeScored[i] = true;
                 score++;
             }
@@ -84,7 +83,6 @@ document.addEventListener("keydown", (event) => {
         Jump();
     }
 });
-let gameLoop = setInterval(update, deltaTime * 100);
 function isCollidingWithAny(player, pipes) {
     for (let i = 0; i < pipes.length; i++) {
         const pipe = pipes[i];
@@ -120,11 +118,7 @@ function createPipe() {
         return;
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
-<<<<<<< HEAD
-    pipeContainer.style.left = "100vw";
-=======
     pipeContainer.style.left = "1200px";
->>>>>>> 6a504937a0fb05bd5fbfad73998fbea14e134f06
     // Erstelle obere und untere Röhre
     const pipeUp = document.createElement("div");
     pipeUp.classList.add("pipe-up");
@@ -142,10 +136,6 @@ function createPipe() {
     pipeContainerXPositions.push(600);
     pipeScored.push(false);
 }
-<<<<<<< HEAD
-setInterval(() => {
-    createPipe();
-}, 2000);
 //game over
 let gameover = document.getElementById("gameover");
 let restart = document.getElementById("restart");
@@ -155,8 +145,12 @@ function gameOver() {
     }
 }
 function restartGame() {
+    addEventListener("click", () => {
+        pipeContainers = [];
+        pipeContainerXPositions = [];
+        pipeScored = [];
+        gameLoop = setInterval(update, deltaTime * 100);
+        positionY = 300;
+        gameover.style.opacity = "0";
+    });
 }
-=======
-//game over
-let gameover = document.getElementById("gameover");
->>>>>>> 6a504937a0fb05bd5fbfad73998fbea14e134f06
