@@ -131,21 +131,6 @@ function createPipe() {
     movePipe(pipeContainer);
 }
 
-
-function movePipe(pipe: HTMLElement) {
-    let pipeLeft = window.innerWidth;
-
-    const moveInterval = setInterval(() => {
-        pipeLeft -= 5;
-        pipe.style.left = `${pipeLeft}px`;
-
-        if (pipeLeft < -60) {
-            clearInterval(moveInterval);
-            pipe.remove();
-        }
-    }, 30);
-}
-
 setInterval(() => {
     createPipe();
 }, 2000);
