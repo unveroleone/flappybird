@@ -12,10 +12,11 @@ body {
     position: absolute;
     top: 100px;
     left: 50px;
-    width: 50px;
-    height: 50px;
-    background-color: yellow;
-    border: 1px solid black;
+    width: 70px;
+    height: 70px;
+    background-image: url("/media/flappy.png");
+    background-size: cover;
+
 }
 
 #ground-container {
@@ -34,6 +35,7 @@ body {
     height: 50px;
     background-image: url("/media/floor-sprite.png");
     background-size: cover;
+<<<<<<< HEAD
     background-repeat: repeat;
 }
 
@@ -46,6 +48,10 @@ body {
 }
 #ground2 {
     left: 200%;
+=======
+    background-repeat:repeat;
+    border-radius: 10px;
+>>>>>>> c1578f8958d5c05d3727a5e8b65c71a3e161e236
 }
 
 .pipe-container {
