@@ -6,9 +6,9 @@ let positionXGround = 0; // start position in px
 let positionXPipes = 300;
 let speed = -10;
 let deltaTime = 0.1;
-let jumpForce = 50;
+let jumpForce = 40;
 const skylevel = 0;
-const groundLevel = 537; // bottom height in px
+const groundLevel = 555; // bottom height in px
 const player = document.getElementById("player");
 const ground1 = document.getElementById("ground1");
 const ground2 = document.getElementById("ground2");
@@ -37,8 +37,8 @@ function update() {
     }
     player.style.top = `${positionY}px`;
     ground1.style.left = `${positionXGround}px`;
-    ground2.style.left = `${positionXGround + ground1.offsetWidth}px`;
-    ground3.style.left = `${positionXGround + ground1.offsetWidth}px`;
+    ground2.style.left = `${positionXGround + ground1.offsetWidth - 1}px`;
+    ground3.style.left = `${positionXGround + ground1.offsetWidth - 1}px`;
     pipeholder.style.left = `${positionXPipes}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
     if (isCollidingWithAny(player, pipes)) {
@@ -69,10 +69,11 @@ function isColliding(el1, el2) {
         return false;
     const rect1 = el1.getBoundingClientRect();
     const rect2 = el2.getBoundingClientRect();
-    return (rect1.left < rect2.right &&
-        rect1.right > rect2.left &&
-        rect1.top < rect2.bottom &&
-        rect1.bottom > rect2.top);
+    const shrink = 5;
+    return (rect1.left + shrink < rect2.right - shrink &&
+        rect1.right - shrink > rect2.left + shrink &&
+        rect1.top + shrink < rect2.bottom - shrink &&
+        rect1.bottom - shrink > rect2.top + shrink);
 }
 document.addEventListener("wheel", function (event) {
     if (event.ctrlKey) {
