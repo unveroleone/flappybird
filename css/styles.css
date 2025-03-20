@@ -36,16 +36,41 @@ header{
 
 #gameover {
     display: relative;
+    opacity: 0;
+    justify-content: center;
     align-items: center;
     text-align: center;
     margin: 0 auto;
     background-color: beige;
     width: 250px;
-    height: 130px;
+    height: 140px;
     border-radius: 20px;
     color: black;
     padding: 7px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+#gameover button {
+    background-color: white;
+    border: solid black 1px;
+    border-radius: 10px;
+    width: 60px;
+    height: 30px;
+    transition: all ease 0.3s;
+    margin-bottom: 10px;
+}
+
+#gameover button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    background-color: black;
+    color: white;
+}
+
 #ground-container {
     position: absolute;
     bottom: 0;
