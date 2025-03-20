@@ -1,3 +1,10 @@
+html, body {
+    touch-action: pan-x pan-y;
+    user-scalable: no;
+    overscroll-behavior: contain;
+}
+
+
 html{
     overflow-y: hidden;
     overflow-x: hidden;

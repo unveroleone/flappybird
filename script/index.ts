@@ -40,6 +40,10 @@ function update(): void {
     ground2.style.left = `${positionXGround + ground1.offsetWidth}px`;
     ground3.style.left = `${positionXGround + ground1.offsetWidth}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
+    
+    if (isCollidingWithAny(player, pipes)) {
+        console.log("Collision detected with a pipe!");
+    }
 }
 
 function Jump(): void {
@@ -54,6 +58,16 @@ document.addEventListener("keydown", (event) => {
 
 let gameLoop = setInterval(update, deltaTime * 100);
 
+function isCollidingWithAny(player: HTMLElement, pipes: HTMLCollectionOf<Element>): boolean {
+    for (let i = 0; i < pipes.length; i++) {
+        const pipe = pipes[i] as HTMLElement;
+        if (isColliding(player, pipe)) {
+            return true; // Collision detected with at least one pipe
+        }
+    }
+    return false; // No collision detected
+}
+
 function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
     if (!el1 || !el2) return false;
 
@@ -67,3 +81,9 @@ function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
         rect1.bottom > rect2.top
     );
 }
+
+document.addEventListener("wheel", function (event) {
+    if (event.ctrlKey) {
+        event.preventDefault();
+    }
+}, { passive: false });
