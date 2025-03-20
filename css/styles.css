@@ -1,6 +1,11 @@
+html{
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 body {
     width: 100%;
-    height: 100vh; 
+    height: 70vh;
     margin: 0;
     background-image: url('/media/background_and_road.png');
     background-size: cover;
@@ -53,6 +58,7 @@ body {
     position: absolute;
     left: 300px; 
     top: 0;
+    bottom: 0;
     width: 60px;
     height: 100vh;
 }
@@ -65,12 +71,14 @@ body {
 
 .pipe-top {
     position: absolute;
-    bottom: 100%;
+    bottom: auto;
     height: 150px;
+    bottom: 0;
 }
 
 .pipe-bottom {
     position: absolute;
-    top: 100%; 
+    top: auto;
+    bottom: 0;
     height: 200px;
 }
