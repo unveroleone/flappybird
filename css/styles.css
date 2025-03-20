@@ -4,6 +4,7 @@ html, body {
     overscroll-behavior: contain;
     overflow-y: hidden;
     overflow-x: hidden;
+    font-family: 'Inter', sans-serif;
 }
 
 body {
@@ -18,7 +19,9 @@ body {
 
 header{
     text-align: end;
-    margin-right: 20px;
+    margin-right: 40px;
+    color: white;
+    font-size: 300;
 }
 
 #player {
@@ -30,8 +33,19 @@ header{
     background-image: url("/media/flappy.png");
     background-size: cover;
 }
-    
 
+#gameover {
+    display: relative;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    background-color: beige;
+    width: 250px;
+    height: 130px;
+    border-radius: 20px;
+    color: black;
+    padding: 7px;
+}
 #ground-container {
     position: absolute;
     bottom: 0;
