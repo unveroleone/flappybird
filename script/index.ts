@@ -24,10 +24,11 @@ let pipeContainers: HTMLElement[] = [];
 let pipeContainerXPositions: number[] = [];
 let pipeScored: boolean[] = [];
 
-let createPipeInterval;
+let createPipeInterval: number;
+
 
 createPipeInterval = setInterval(createPipe, 2300);
-let gameLoop = setInterval(update, deltaTime * 100);
+let gameLoop = setInterval(update, 10);
 
 function update(): void {
     scoretext.innerHTML = `Score: ${score}`;
@@ -145,14 +146,14 @@ function createPipe() {
     pipeContainer.classList.add("pipe-container");
     pipeContainer.style.left = "1200px";
 
-    // Erstelle obere und untere Röhre
+    // Create to and down pipes
     const pipeUp = document.createElement("div");
     pipeUp.classList.add("pipe-up");
 
     const pipeDown = document.createElement("div");
     pipeDown.classList.add("pipe-down");
 
-    // Zufällige Höhe für obere Röhre
+    // random height for pipe
     const pipeHeight = getRandomPipeHeight();
     pipeUp.style.height = `${pipeHeight}px`;
 
@@ -176,18 +177,39 @@ let restart = document.getElementById("restart")
 
 function gameOver(){
      if(running === false){
-        gameover.style.opacity = "1"
+        gameover.style.display = "relative";
      }
 }
 
 
-function restartGame(){
-    addEventListener("click", () => {
-        pipeContainers = [];
-        pipeContainerXPositions = [];
-        pipeScored= [];
-        gameLoop = setInterval(update, deltaTime * 100);
-        positionY = 300;
-        gameover.style.opacity = "0";
-    })
+restart?.addEventListener("click", restartGame);
+
+
+function restartGame() {
+    // 1. stop every interval
+    clearInterval(gameLoop);
+    clearInterval(createPipeInterval);
+
+    // 2. reset variables
+    positionY = 100;      // reset startheight
+    velocity = 0;         // set speed to 0
+    positionXGround = 0; 
+    positionXPipes = 300;
+    score = 0;
+    scoretext.innerHTML = `Score: ${score}`;
+    running = true;
+
+    // empty arrays and DOM-Elements
+    pipeContainers.forEach(pipe => pipe.remove()); 
+    pipeContainers = [];
+    pipeContainerXPositions = [];
+    pipeScored = [];
+
+    // 3. hide game over
+    gameover.style.display = "none";
+
+    // 4. start new intervals
+    gameLoop = setInterval(update, 10);
+    createPipeInterval = setInterval(createPipe, 2300);
 }
+
