@@ -2,14 +2,16 @@ let gravity: number = 9.81;
 let velocity: number = 0;    
 let positionY: number = 100; // start height in px
 let positionX : number = 0; // start position in px
-let speed : number = 10;
+let speed : number = -10;
 let deltaTime: number = 0.1; 
 let jumpForce : number = 50;
 const skylevel : number = 0;
 const groundLevel: number = 537; // botom height in px
 
 const player = document.getElementById("player")!;
-const ground = document.getElementById("ground")!;
+const ground1 = document.getElementById("ground1")!;
+const ground2 = document.getElementById("ground2")!;
+const ground3 = document.getElementById("ground3")!;
 
 function update(): void {
     velocity += gravity * deltaTime;
@@ -29,8 +31,13 @@ function update(): void {
         clearInterval(gameLoop);
     }
 
+    if(positionX <= -800){
+        positionX = 0;
+    }
     player.style.top = `${positionY}px`; 
-    ground.style.left = `${positionX}px`;
+    ground1.style.left = `${positionX}px`;
+    ground2.style.left = `${positionX +690}px`;
+    ground3.style.left = `${positionX +1380}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
 }
 
