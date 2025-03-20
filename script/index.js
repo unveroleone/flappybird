@@ -33,8 +33,8 @@ function update() {
     }
     player.style.top = `${positionY}px`;
     ground1.style.left = `${positionX}px`;
-    ground2.style.left = `${positionX + 710}px`;
-    ground3.style.left = `${positionX + 1380}px`;
+    ground2.style.left = `${positionX + ground1.offsetWidth}px`;
+    ground3.style.left = `${positionX + ground1.offsetWidth}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
 }
 function Jump() {
