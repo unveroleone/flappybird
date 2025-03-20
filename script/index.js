@@ -19,7 +19,9 @@ const pipeholder = document.getElementById("pipe-container");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 setInterval(() => {
-    createPipe();
+    if (running) {
+        createPipe();
+    }
 }, 2000);
 function update() {
     running = true;
@@ -64,6 +66,7 @@ function update() {
         clearInterval(gameLoop);
         running = false;
     }
+    gameOver();
 }
 function Jump() {
     velocity = -jumpForce;
@@ -107,7 +110,7 @@ function getRandomPipeHeight() {
 function createPipe() {
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
-    pipeContainer.style.left = "100vw"; // Start ganz rechts vom Bildschirm
+    pipeContainer.style.left = "100vw";
     // Erstelle obere und untere Röhre
     const pipeUp = document.createElement("div");
     pipeUp.classList.add("pipe-up");
@@ -123,4 +126,17 @@ function createPipe() {
     document.body.appendChild(pipeContainer);
     pipeContainers.push(pipeContainer);
     pipeContainerXPositions.push(600);
+}
+setInterval(() => {
+    createPipe();
+}, 2000);
+//game over
+let gameover = document.getElementById("gameover");
+let restart = document.getElementById("restart");
+function gameOver() {
+    if (running === false) {
+        gameover.style.opacity = "1";
+    }
+}
+function restartGame() {
 }

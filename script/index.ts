@@ -75,6 +75,7 @@ function update(): void {
         clearInterval(gameLoop);
         running = false;
     }
+    gameOver();
 }
 
 function Jump(): void {
@@ -161,9 +162,17 @@ setInterval(() => {
     createPipe();
 }, 2000);
 
-
-
-
 //game over
-let gameover = document.getElementById("gameover");
+let gameover = document.getElementById("gameover")!;
+let restart = document.getElementById("restart")
 
+function gameOver(){
+     if(running === false){
+        gameover.style.opacity = "1"
+     }
+}
+
+
+function restartGame(){
+
+}
