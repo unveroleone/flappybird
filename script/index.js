@@ -9,20 +9,22 @@ let deltaTime = 0.1;
 let jumpForce = 40;
 const skylevel = 0;
 const groundLevel = 555; // bottom height in px
-let running = false;
+let score = 0;
+let running = true;
 const player = document.getElementById("player");
 const ground1 = document.getElementById("ground1");
 const ground2 = document.getElementById("ground2");
 const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
 const pipeholder = document.getElementById("pipe-container");
+const scoretext = document.getElementById("score");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
-setInterval(() => {
-    createPipe();
-}, 2000);
+let pipeScored = [];
+let createPipeInterval;
+createPipeInterval = setInterval(createPipe, 2300);
 function update() {
-    running = true;
+    scoretext.innerHTML = `Score: ${score}`;
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
@@ -55,14 +57,20 @@ function update() {
             pipeContainerXPositions[i] += speed * deltaTime;
             let pos = pipeContainerXPositions[i];
             pipeContainers[i].style.left = `${pos}px`;
+            if (pipeContainerXPositions[i] <= 50) {
+                pipeScored[i] = true;
+                score++;
+            }
         }
     }
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
     console.log(`Position: ${positionXPipes.toFixed(2)}px`);
     if (isCollidingWithAny(player, pipes)) {
         console.log("Collision detected with a pipe!");
-        clearInterval(gameLoop);
         running = false;
+        clearInterval(gameLoop);
+    }
+    else {
     }
 }
 function Jump() {
@@ -105,9 +113,11 @@ function getRandomPipeHeight() {
     return Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
 }
 function createPipe() {
+    if (!running)
+        return;
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
-    pipeContainer.style.left = "100vw"; // Start ganz rechts vom Bildschirm
+    pipeContainer.style.left = "1200px";
     // Erstelle obere und untere Röhre
     const pipeUp = document.createElement("div");
     pipeUp.classList.add("pipe-up");
@@ -123,4 +133,7 @@ function createPipe() {
     document.body.appendChild(pipeContainer);
     pipeContainers.push(pipeContainer);
     pipeContainerXPositions.push(600);
+    pipeScored.push(false);
 }
+//game over
+let gameover = document.getElementById("gameover");
