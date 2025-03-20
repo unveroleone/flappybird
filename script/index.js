@@ -41,6 +41,7 @@ function update() {
     ground3.style.left = `${positionXGround + ground1.offsetWidth - 1}px`;
     pipeholder.style.left = `${positionXPipes}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
+    console.log(`Position: ${positionXPipes.toFixed(2)}px`);
     if (isCollidingWithAny(player, pipes)) {
         console.log("Collision detected with a pipe!");
         clearInterval(gameLoop);
@@ -80,3 +81,41 @@ document.addEventListener("wheel", function (event) {
         event.preventDefault();
     }
 }, { passive: false });
+function getRandomPipeHeight() {
+    const minHeight = 50;
+    const maxHeight = 300;
+    return Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
+}
+function createPipe() {
+    const pipeContainer = document.createElement("div");
+    pipeContainer.classList.add("pipe-container");
+    pipeContainer.style.left = "100vw"; // Start ganz rechts vom Bildschirm
+    // Erstelle obere und untere Röhre
+    const pipeUp = document.createElement("div");
+    pipeUp.classList.add("pipe-up");
+    const pipeDown = document.createElement("div");
+    pipeDown.classList.add("pipe-down");
+    // Zufällige Höhe für obere Röhre
+    const pipeHeight = getRandomPipeHeight();
+    pipeUp.style.height = `${pipeHeight}px`;
+    const gap = 150;
+    pipeDown.style.height = `${window.innerHeight - pipeHeight - gap}px`;
+    pipeContainer.appendChild(pipeUp);
+    pipeContainer.appendChild(pipeDown);
+    document.body.appendChild(pipeContainer);
+    movePipe(pipeContainer);
+}
+function movePipe(pipe) {
+    let pipeLeft = window.innerWidth;
+    const moveInterval = setInterval(() => {
+        pipeLeft -= 5;
+        pipe.style.left = `${pipeLeft}px`;
+        if (pipeLeft < -60) {
+            clearInterval(moveInterval);
+            pipe.remove();
+        }
+    }, 30);
+}
+setInterval(() => {
+    createPipe();
+}, 2000);
