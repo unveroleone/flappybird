@@ -9,6 +9,8 @@ let jumpForce: number = 40;
 const skylevel: number = 0;
 const groundLevel: number = 555; // bottom height in px
 
+let running: boolean = false;
+
 const player = document.getElementById("player")!;
 const ground1 = document.getElementById("ground1")!;
 const ground2 = document.getElementById("ground2")!;
@@ -17,6 +19,7 @@ const pipes = document.getElementsByClassName("pipe");
 const pipeholder = document.getElementById("pipe-container")!;
 
 function update(): void {
+    running = true;
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
@@ -27,12 +30,14 @@ function update(): void {
         velocity = 0; 
         console.log("Player reached bottom -- Game Over");
         clearInterval(gameLoop);
+        running = false;
     }
     else if(positionY <= skylevel){
         positionY = skylevel;
         velocity = 0;
         console.log("Player reached sky -- Game Over");
         clearInterval(gameLoop);
+        running = false;
     }
 
     if(positionXGround <= -ground1.offsetWidth){
@@ -49,6 +54,7 @@ function update(): void {
     if (isCollidingWithAny(player, pipes)) {
         console.log("Collision detected with a pipe!");
         clearInterval(gameLoop);
+        running = false;
     }
 }
 
