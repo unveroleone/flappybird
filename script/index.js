@@ -28,12 +28,12 @@ function update() {
         console.log("Player reached sky -- Game Over");
         clearInterval(gameLoop);
     }
-    if (positionX <= -790) {
+    if (positionX <= -800) {
         positionX = 0;
     }
     player.style.top = `${positionY}px`;
     ground1.style.left = `${positionX}px`;
-    ground2.style.left = `${positionX + 690}px`;
+    ground2.style.left = `${positionX + 710}px`;
     ground3.style.left = `${positionX + 1380}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
 }
