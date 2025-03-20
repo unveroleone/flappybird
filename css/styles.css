@@ -16,6 +16,11 @@ body {
     z-index: -1;
 }
 
+header{
+    text-align: end;
+    margin-right: 20px;
+}
+
 #player {
     position: absolute;
     top: 100px;
