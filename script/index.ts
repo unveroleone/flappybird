@@ -1,13 +1,13 @@
-let gravity: number = 9.81; 
-let velocity: number = 0;    
+let gravity: number = 9.81;
+let velocity: number = 0;
 let positionY: number = 100; // start height in px
-let positionXGround : number = 0; // start position in px
-let positionXPipes : number = 300;
-let speed : number = -10;
-let deltaTime: number = 0.1; 
-let jumpForce : number = 50;
-const skylevel : number = 0;
-const groundLevel: number = 537; // bottom height in px
+let positionXGround: number = 0; // start position in px
+let positionXPipes: number = 300;
+let speed: number = -10;
+let deltaTime: number = 0.1;
+let jumpForce: number = 40;
+const skylevel: number = 0;
+const groundLevel: number = 555; // bottom height in px
 
 const player = document.getElementById("player")!;
 const ground1 = document.getElementById("ground1")!;
@@ -40,8 +40,8 @@ function update(): void {
     }
     player.style.top = `${positionY}px`; 
     ground1.style.left = `${positionXGround}px`;
-    ground2.style.left = `${positionXGround + ground1.offsetWidth}px`;
-    ground3.style.left = `${positionXGround + ground1.offsetWidth}px`;
+    ground2.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
+    ground3.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
     pipeholder.style.left = `${positionXPipes}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
     console.log(`Position: ${positionXPipes.toFixed(2)}px`);
@@ -80,13 +80,16 @@ function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
     const rect1 = el1.getBoundingClientRect();
     const rect2 = el2.getBoundingClientRect();
 
+    const shrink = 5;
+
     return (
-        rect1.left < rect2.right &&
-        rect1.right > rect2.left &&
-        rect1.top < rect2.bottom &&
-        rect1.bottom > rect2.top
+        rect1.left + shrink < rect2.right - shrink &&
+        rect1.right - shrink > rect2.left + shrink &&
+        rect1.top + shrink < rect2.bottom - shrink &&
+        rect1.bottom - shrink > rect2.top + shrink
     );
 }
+
 
 document.addEventListener("wheel", function (event) {
     if (event.ctrlKey) {
