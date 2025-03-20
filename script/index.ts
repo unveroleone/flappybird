@@ -113,7 +113,7 @@ function getRandomPipeHeight() {
 function createPipe() {
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
-    pipeContainer.style.left = "100vw"; // Start ganz rechts vom Bildschirm
+    pipeContainer.style.left = "100vw";
 
     // Erstelle obere und untere Röhre
     const pipeUp = document.createElement("div");
@@ -140,3 +140,10 @@ function createPipe() {
 setInterval(() => {
     createPipe();
 }, 2000);
+
+
+
+
+//game over
+let gameover = document.getElementById("gameover");
+
