@@ -9,6 +9,7 @@ const skylevel : number = 0;
 const groundLevel: number = 537; // botom height in px
 
 const player = document.getElementById("player")!;
+const ground = document.getElementById("ground")!;
 
 function update(): void {
     velocity += gravity * deltaTime;
@@ -29,7 +30,7 @@ function update(): void {
     }
 
     player.style.top = `${positionY}px`; 
-    player.style.left = `${positionX}px`;
+    ground.style.left = `${positionX}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
 }
 

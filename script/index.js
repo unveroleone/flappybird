@@ -9,6 +9,7 @@ let jumpForce = 50;
 const skylevel = 0;
 const groundLevel = 537; // botom height in px
 const player = document.getElementById("player");
+const ground = document.getElementById("ground");
 function update() {
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
@@ -26,7 +27,7 @@ function update() {
         clearInterval(gameLoop);
     }
     player.style.top = `${positionY}px`;
-    player.style.left = `${positionX}px`;
+    ground.style.left = `${positionX}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
 }
 function Jump() {
