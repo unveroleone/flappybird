@@ -3,22 +3,25 @@ let gravity = 9.81;
 let velocity = 0;
 let positionY = 100; // start height in px
 let positionXGround = 0; // start position in px
+let positionXPipes = 300;
 let speed = -10;
 let deltaTime = 0.1;
 let jumpForce = 50;
 const skylevel = 0;
-const groundLevel = 537; // botom height in px
+const groundLevel = 537; // bottom height in px
 const player = document.getElementById("player");
 const ground1 = document.getElementById("ground1");
 const ground2 = document.getElementById("ground2");
 const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
+const pipeholder = document.getElementById("pipe-container");
 function update() {
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
+    positionXPipes += speed * deltaTime;
     if (positionY >= groundLevel) {
-        positionY = groundLevel; // stopps falling
+        positionY = groundLevel;
         velocity = 0;
         console.log("Player reached bottom -- Game Over");
         clearInterval(gameLoop);
@@ -36,9 +39,11 @@ function update() {
     ground1.style.left = `${positionXGround}px`;
     ground2.style.left = `${positionXGround + ground1.offsetWidth}px`;
     ground3.style.left = `${positionXGround + ground1.offsetWidth}px`;
+    pipeholder.style.left = `${positionXPipes}px`;
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
     if (isCollidingWithAny(player, pipes)) {
         console.log("Collision detected with a pipe!");
+        clearInterval(gameLoop);
     }
 }
 function Jump() {
