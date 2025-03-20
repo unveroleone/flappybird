@@ -17,8 +17,12 @@ const ground1 = document.getElementById("ground1")!;
 const ground2 = document.getElementById("ground2")!;
 const ground3 = document.getElementById("ground3")!;
 const pipes = document.getElementsByClassName("pipe");
-const pipeholder = document.getElementById("pipe-container")!;
+//const pipeholder = document.getElementById("pipe-container")!;
 const scoretext = document.getElementById("score")!;
+const gameover = document.getElementById("gameover")!;
+const restart = document.getElementById("restart")
+const gameOverScore = document.getElementById("gameOverScore")!;
+
 
 let pipeContainers: HTMLElement[] = [];
 let pipeContainerXPositions: number[] = [];
@@ -30,38 +34,53 @@ let createPipeInterval: number;
 createPipeInterval = setInterval(createPipe, 2300);
 let gameLoop = setInterval(update, 10);
 
+
+// Update function
 function update(): void {
+
+    // setting score
     scoretext.innerHTML = `Score: ${score}`;
 
+    // Setting the positions
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
     positionXPipes +=speed * deltaTime;
 
+    // stop game when player touches bottom of the screen
     if (positionY >= groundLevel) {
         positionY = groundLevel;
         velocity = 0; 
         console.log("Player reached bottom -- Game Over");
-        clearInterval(gameLoop);
         running = false;
+        gameOver();
+        clearInterval(gameLoop);
     }
+    // stop game when player touches top of the screen
     else if(positionY <= skylevel){
         positionY = skylevel;
         velocity = 0;
         console.log("Player reached sky -- Game Over");
-        clearInterval(gameLoop);
         running = false;
+        gameOver();
+        clearInterval(gameLoop);
     }
 
+    //Moving player
+    player.style.top = `${positionY}px`;
+
+    // set ground to startposition when it reaches end position for a "loop"
     if(positionXGround <= -ground1.offsetWidth){
         positionXGround = 0;
     }
-    player.style.top = `${positionY}px`;
+    //moving the ground
     ground1.style.left = `${positionXGround}px`;
     ground2.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
     ground3.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
-    pipeholder.style.left = `${positionXPipes}px`;
-    console.log(pipeContainers);
+
+    //Moving the test pipes
+    //pipeholder.style.left = `${positionXPipes}px`;
+    //console.log(pipeContainers);
     
     if (pipeContainers.length > 0) {
         for(let i = 0; i < pipeContainers.length; i++){
@@ -81,12 +100,9 @@ function update(): void {
     if (isCollidingWithAny(player, pipes)) {
         console.log("Collision detected with a pipe!");
         running = false;
+        gameOver();
         clearInterval(gameLoop);
     }
-    else{
-        
-    }
-    gameOver();
 }
 
 function Jump(): void {
@@ -134,31 +150,35 @@ document.addEventListener("wheel", function (event) {
 }, { passive: false });
 
 
-function getRandomPipeHeight() {
-    const minHeight = 50;
-    const maxHeight = 300;
+function getRandomPipeHeight(minHeight : number, maxHeight : number) {
     return Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
 }
 
 function createPipe() {
+    const pipeStartPos : number= 1350;
     if(!running) return;
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
-    pipeContainer.style.left = "1200px";
+    pipeContainer.style.left = `${pipeStartPos}px`;
 
     // Create to and down pipes
     const pipeUp = document.createElement("div");
+    pipeUp.classList.add("pipe")
     pipeUp.classList.add("pipe-up");
 
     const pipeDown = document.createElement("div");
+    pipeDown.classList.add("pipe")
     pipeDown.classList.add("pipe-down");
 
     // random height for pipe
-    const pipeHeight = getRandomPipeHeight();
+    pipeUp.style.position = "absolute";
+    const pipeHeight = getRandomPipeHeight(50, 300);
     pipeUp.style.height = `${pipeHeight}px`;
 
-    const gap = 150;
-    pipeDown.style.height = `${window.innerHeight - pipeHeight - gap}px`;
+    const gap = 200;
+    pipeDown.style.position = "absolute";
+    pipeDown.style.top    = `${pipeHeight + gap}px`;
+    pipeDown.style.height = `calc(100vh - ${pipeHeight + gap}px)`;
 
     pipeContainer.appendChild(pipeUp);
     pipeContainer.appendChild(pipeDown);
@@ -166,18 +186,19 @@ function createPipe() {
     document.body.appendChild(pipeContainer);
 
     pipeContainers.push(pipeContainer);
-    pipeContainerXPositions.push(600);
+    pipeContainerXPositions.push(pipeStartPos);
     pipeScored.push(false);
 }
 
 
 //game over
-let gameover = document.getElementById("gameover")!;
-let restart = document.getElementById("restart")
+
 
 function gameOver(){
      if(running === false){
-        gameover.style.display = "relative";
+        gameover.style.display = "block";
+
+        gameOverScore.innerHTML = `Your Score is: ${score}`;
      }
 }
 

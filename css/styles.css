@@ -35,8 +35,7 @@ header{
 }
 
 #gameover {
-    display: relative;
-    opacity: 0;
+    display: none;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -113,20 +112,14 @@ header{
     background-color: green;
     width: 100%;
     border: black solid 2px;
-    z-index: 2;
+    z-index: -1;
 }
 
 
 .pipe-top {
     position: absolute;
-    bottom: 100%;
-    height: 200px;
-    top: -1px;
 }
 
 .pipe-bottom {
     position: absolute;
-    top: auto;
-    bottom: 0;
-    height: 200px;
 }
