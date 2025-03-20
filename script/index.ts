@@ -18,8 +18,18 @@ const ground3 = document.getElementById("ground3")!;
 const pipes = document.getElementsByClassName("pipe");
 const pipeholder = document.getElementById("pipe-container")!;
 
+let pipeContainers: HTMLElement[] = [];
+let pipeContainerXPositions: number[] = [];
+
+setInterval(() => {
+    if(running){
+        createPipe();
+    }
+}, 2000);
+
 function update(): void {
     running = true;
+
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
@@ -48,6 +58,15 @@ function update(): void {
     ground2.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
     ground3.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
     pipeholder.style.left = `${positionXPipes}px`;
+    console.log(pipeContainers);
+    if (pipeContainers.length > 0) {
+        for(let i = 0; i < pipeContainers.length; i++){
+            pipeContainerXPositions[i] += speed * deltaTime;
+            let pos = pipeContainerXPositions[i];
+            pipeContainers[i].style.left = `${pos}px`;
+        }
+    }
+        
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
     console.log(`Position: ${positionXPipes.toFixed(2)}px`);
 
@@ -134,7 +153,8 @@ function createPipe() {
 
     document.body.appendChild(pipeContainer);
 
-    movePipe(pipeContainer);
+    pipeContainers.push(pipeContainer);
+    pipeContainerXPositions.push(600);
 }
 
 setInterval(() => {

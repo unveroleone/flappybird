@@ -9,13 +9,20 @@ let deltaTime = 0.1;
 let jumpForce = 40;
 const skylevel = 0;
 const groundLevel = 555; // bottom height in px
+let running = false;
 const player = document.getElementById("player");
 const ground1 = document.getElementById("ground1");
 const ground2 = document.getElementById("ground2");
 const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
 const pipeholder = document.getElementById("pipe-container");
+let pipeContainers = [];
+let pipeContainerXPositions = [];
+setInterval(() => {
+    createPipe();
+}, 2000);
 function update() {
+    running = true;
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
@@ -25,12 +32,14 @@ function update() {
         velocity = 0;
         console.log("Player reached bottom -- Game Over");
         clearInterval(gameLoop);
+        running = false;
     }
     else if (positionY <= skylevel) {
         positionY = skylevel;
         velocity = 0;
         console.log("Player reached sky -- Game Over");
         clearInterval(gameLoop);
+        running = false;
     }
     if (positionXGround <= -ground1.offsetWidth) {
         positionXGround = 0;
@@ -40,11 +49,20 @@ function update() {
     ground2.style.left = `${positionXGround + ground1.offsetWidth - 1}px`;
     ground3.style.left = `${positionXGround + ground1.offsetWidth - 1}px`;
     pipeholder.style.left = `${positionXPipes}px`;
+    console.log(pipeContainers);
+    if (pipeContainers.length > 0) {
+        for (let i = 0; i < pipeContainers.length; i++) {
+            pipeContainerXPositions[i] += speed * deltaTime;
+            let pos = pipeContainerXPositions[i];
+            pipeContainers[i].style.left = `${pos}px`;
+        }
+    }
     console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
     console.log(`Position: ${positionXPipes.toFixed(2)}px`);
     if (isCollidingWithAny(player, pipes)) {
         console.log("Collision detected with a pipe!");
         clearInterval(gameLoop);
+        running = false;
     }
 }
 function Jump() {
@@ -103,19 +121,6 @@ function createPipe() {
     pipeContainer.appendChild(pipeUp);
     pipeContainer.appendChild(pipeDown);
     document.body.appendChild(pipeContainer);
-    movePipe(pipeContainer);
+    pipeContainers.push(pipeContainer);
+    pipeContainerXPositions.push(600);
 }
-function movePipe(pipe) {
-    let pipeLeft = window.innerWidth;
-    const moveInterval = setInterval(() => {
-        pipeLeft -= 5;
-        pipe.style.left = `${pipeLeft}px`;
-        if (pipeLeft < -60) {
-            clearInterval(moveInterval);
-            pipe.remove();
-        }
-    }, 30);
-}
-setInterval(() => {
-    createPipe();
-}, 2000);
