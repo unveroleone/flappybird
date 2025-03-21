@@ -6,6 +6,11 @@ let positionXGround = 0;
 let positionXPipes = 300;
 let speed = -900; // pixels/s
 let jumpForce = 600;
+let difficulty = "easy";
+let easyMultiplier = 1;
+let mediumMultiplier = 1.5;
+let hardMultiplier = 2;
+let multiplier = 1;
 const skylevel = 0;
 const groundLevel = 555;
 let score = 0;
@@ -22,6 +27,7 @@ const gameOverScore = document.getElementById("gameOverScore");
 const mainMenu = document.getElementById("MainMenu");
 const fpsCounter = document.getElementById("fps-counter");
 const background = document.getElementById("background");
+const difficultySelector = document.getElementById("difficulty");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 let pipeScored = [];
@@ -29,7 +35,9 @@ let gameStarted = false;
 let createPipeInterval;
 let lastTime = performance.now();
 function update(deltaTime) {
+    difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
+    console.log(difficulty);
     // Update positions
     if (gameStarted) {
         velocity += gravity * deltaTime;
@@ -80,6 +88,15 @@ function update(deltaTime) {
         running = false;
         gameOver();
         return;
+    }
+    if (difficulty === "easy") {
+        multiplier = easyMultiplier;
+    }
+    else if (difficulty === "medium") {
+        multiplier = mediumMultiplier;
+    }
+    else if (difficulty === "hard") {
+        multiplier = hardMultiplier;
     }
 }
 function gameLoopFunction(currentTime) {
@@ -198,8 +215,6 @@ window.addEventListener("keydown", (e) => {
     }
 });
 function updateFPS(currentTime) {
-    console.log(gameStarted);
-    console.log(gameStarted);
     frameCount++;
     if (currentTime - lastFpsTime >= 1000) {
         fps = frameCount;

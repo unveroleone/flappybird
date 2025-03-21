@@ -31,6 +31,8 @@ const mainMenu = document.getElementById("MainMenu")!;
 const fpsCounter = document.getElementById("fps-counter")!;
 const background = document.getElementById("background")!;
 
+const difficultySelector = document.getElementById("difficulty") as HTMLSelectElement;
+
 let pipeContainers: HTMLElement[] = [];
 let pipeContainerXPositions: number[] = [];
 let pipeScored: boolean[] = [];
@@ -42,9 +44,9 @@ let createPipeInterval: number;
 let lastTime = performance.now();
 
 function update(deltaTime: number): void {
-    
+    difficulty = difficultySelector.value; 
     scoretext.innerHTML = `Score: ${score}`;
-
+    console.log(difficulty);
     // Update positions
     if(gameStarted){
         velocity += gravity * deltaTime;
@@ -256,8 +258,6 @@ window.addEventListener("keydown", (e: KeyboardEvent) => {
 });
 
 function updateFPS(currentTime: number): void {
-    console.log(gameStarted);
-    console.log(gameStarted);
     frameCount++;
 
     if (currentTime - lastFpsTime >= 1000) {
