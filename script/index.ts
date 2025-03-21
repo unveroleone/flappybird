@@ -237,3 +237,5 @@ function restartGame() {
     createPipeInterval = setInterval(createPipe, 2300);
 }
 
+// FPS Counter
+const fpsCounter = document.getElementById("fps-counter")!;
