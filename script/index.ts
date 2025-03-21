@@ -5,7 +5,7 @@ let positionXGround: number = 0; // start position in px
 let positionXPipes: number = 300;
 let speed: number = -10;
 let deltaTime: number = 0.1;
-let jumpForce: number = 40;
+let jumpForce: number = 30;
 const skylevel: number = 0;
 const groundLevel: number = 555; // bottom height in px
 let score: number = 0;
@@ -155,40 +155,43 @@ function getRandomPipeHeight(minHeight : number, maxHeight : number) {
 }
 
 function createPipe() {
-    const pipeStartPos : number= 1350;
-    if(!running) return;
+    const pipeStartPos = 1350;
+    if (!running) return;
+
+    // Create a container to hold the top & bottom pipes
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
     pipeContainer.style.left = `${pipeStartPos}px`;
 
-    // Create to and down pipes
+    // Create the top and bottom pipes
     const pipeUp = document.createElement("div");
-    pipeUp.classList.add("pipe")
-    pipeUp.classList.add("pipe-up");
+    pipeUp.classList.add("pipe", "pipe-up");
 
     const pipeDown = document.createElement("div");
-    pipeDown.classList.add("pipe")
-    pipeDown.classList.add("pipe-down");
+    pipeDown.classList.add("pipe", "pipe-down");
 
-    // random height for pipe
-    pipeUp.style.position = "absolute";
-    const pipeHeight = getRandomPipeHeight(50, 300);
-    pipeUp.style.height = `${pipeHeight}px`;
-
-    const gap = 200;
-    pipeDown.style.position = "absolute";
-    pipeDown.style.top    = `${pipeHeight + gap}px`;
-    pipeDown.style.height = `calc(100vh - ${pipeHeight + gap}px)`;
-
+    // Append them to the container
     pipeContainer.appendChild(pipeUp);
     pipeContainer.appendChild(pipeDown);
 
+    // -- Instead of scaling the pipes, we move the container up or down. --
+    // We'll pick a random offset so that the "gap" is effectively at different heights.
+    const minOffset = -300;  // adjust as needed (how far up it can move)
+    const maxOffset = 0;     // adjust as needed (the highest the gap can be)
+    // For a random value between minOffset and maxOffset:
+    const randomOffset = Math.floor(Math.random() * (maxOffset - minOffset + 1)) + minOffset;
+
+    pipeContainer.style.top = `${randomOffset}px`; 
+
+    // Finally, add this container into the DOM
     document.body.appendChild(pipeContainer);
 
+    // Keep track if you're using arrays for collision or scoring
     pipeContainers.push(pipeContainer);
     pipeContainerXPositions.push(pipeStartPos);
     pipeScored.push(false);
 }
+
 
 
 //game over

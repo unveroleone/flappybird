@@ -101,25 +101,26 @@ header{
 }
 
 .pipe-container {
+    position: absolute; /* to allow moving it around freely */
+    width: 100px;       /* or however wide your pipe images are */
+  }
+  
+  .pipe {
+    width: 100px;
+    height: 400px;  /* or whatever the natural height is for your pipe image */
+    background-size: cover;
     position: absolute;
-    left: 300px; 
-    top: 0;
-    bottom: 0;
-    width: 60px;
-    height: 100vh;
-}
-.pipe{
-    background-color: green;
-    width: 100%;
-    border: black solid 2px;
     z-index: -1;
+  }
+
+
+.pipe-up {
+    top: 0;
+    transform: rotate(180deg); 
+    background-image: url("/media/pipe_bottom.png");
 }
 
-
-.pipe-top {
-    position: absolute;
-}
-
-.pipe-bottom {
-    position: absolute;
+.pipe-down {
+    top: 600px;  /* top pipe's height (400) + gap (200) = 600 */
+    background-image: url("/media/pipe_bottom.png");
 }
