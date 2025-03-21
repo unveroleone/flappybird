@@ -3,7 +3,8 @@ let velocity = 0;
 let positionY = 300;
 let positionXGround = 0;
 let positionXPipes = 300;
-let speed = -200; // pixels/s
+let speed = -300; // pixels/s
+let originalSpeed = -300;
 let jumpForce = 600;
 
 let difficulty : string = "easy";
@@ -116,17 +117,20 @@ function update(deltaTime: number): void {
         multiplier = hardMultiplier;
     }
 
-    if(score === lastScore + 15 && difficulty === "easy"){
+    if(score === lastScore + 15 && difficulty === "Easy"){
+        clearInterval(createPipeInterval);
         createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
         lastScore += 15;
         speed *= 1.1;
-    }else if (score === lastScore + 15 && difficulty === "medium"){
+    }else if (score === lastScore + 15 && difficulty === "Medium"){
+        clearInterval(createPipeInterval);
         createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
         lastScore += 15;
         speed *= 1.5;
-    }else if (score === lastScore + 20 && difficulty === "hard"){
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
-        lastScore += 20;
+    }else if (score === lastScore + 5 && difficulty === "Hard"){
+        clearInterval(createPipeInterval);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier * 5);
+        lastScore += 5;
         speed *= 2;
     }
 }
@@ -225,6 +229,8 @@ function gameOver() {
 restart?.addEventListener("click", restartGame);
 
 function restartGame() {
+    multiplier = 1;
+    speed = originalSpeed;
     background.style.display = "none";
     mainMenu.style.display = "none";
     clearInterval(createPipeInterval);
