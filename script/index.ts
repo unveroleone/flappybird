@@ -3,7 +3,7 @@ let velocity = 0;
 let positionY = 300;
 let positionXGround = 0;
 let positionXPipes = 300;
-let speed = -50; // pixels/s
+let speed = -200; // pixels/s
 let jumpForce = 600;
 
 let difficulty : string = "easy";
