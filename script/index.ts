@@ -257,3 +257,36 @@ function resetVariable(){
 
 // FPS Counter
 const fpsCounter = document.getElementById("fps-counter")!;
+
+if (!fpsCounter) {
+  throw new Error('Element mit ID "fps-counter" wurde nicht gefunden.');
+}
+
+let lastFrame: number = performance.now();
+let frameCount: number = 0;
+let fps: number = 0;
+let visiible: boolean = false;
+
+window.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key.toLowerCase() === "f") {
+        visiible = !visiible;
+        fpsCounter.style.display = visiible ? "block" : "none";
+    }
+});
+
+
+function updateFPS(): void {
+  const now = performance.now();
+  frameCount++;
+
+  if (now - lastFrame >= 1000) {
+    fps = frameCount;
+    frameCount = 0;
+    lastFrame = now;
+    fpsCounter.textContent = `FPS: ${fps}`;
+  }
+
+  requestAnimationFrame(updateFPS);
+}
+
+requestAnimationFrame(updateFPS);
