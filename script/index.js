@@ -1,7 +1,7 @@
 "use strict";
 let gravity = 2000; // pixels/s²
 let velocity = 0;
-let positionY = 100;
+let positionY = 300;
 let positionXGround = 0;
 let positionXPipes = 300;
 let speed = -300; // pixels/s
@@ -25,15 +25,18 @@ const background = document.getElementById("background");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 let pipeScored = [];
+let gameStarted = false;
 let createPipeInterval;
 let lastTime = performance.now();
 function update(deltaTime) {
     scoretext.innerHTML = `Score: ${score}`;
     // Update positions
-    velocity += gravity * deltaTime;
-    positionY += velocity * deltaTime;
+    if (gameStarted) {
+        velocity += gravity * deltaTime;
+        positionY += velocity * deltaTime;
+        positionXPipes += speed * deltaTime;
+    }
     positionXGround += speed * deltaTime;
-    positionXPipes += speed * deltaTime;
     // Clamp to screen bounds
     if (positionY >= groundLevel) {
         positionY = groundLevel;
@@ -110,6 +113,9 @@ function isColliding(el1, el2) {
 }
 document.addEventListener("keydown", (event) => {
     if (event.code === "Space") {
+        if (!gameStarted) {
+            gameStarted = true;
+        }
         Jump();
     }
 });
@@ -121,6 +127,8 @@ document.addEventListener("wheel", function (event) {
 function createPipe() {
     mainMenu.style.display = "none";
     if (!running)
+        return;
+    if (!gameStarted)
         return;
     const pipeStartPos = 1350;
     const pipeContainer = document.createElement("div");
@@ -142,6 +150,7 @@ function createPipe() {
     pipeScored.push(false);
 }
 function gameOver() {
+    gameStarted = false;
     gameover.style.display = "block";
     gameOverScore.innerHTML = `Your Score is: ${score}`;
     clearInterval(createPipeInterval);
@@ -162,7 +171,7 @@ function restartGame() {
     requestAnimationFrame(gameLoopFunction);
 }
 function resetVariables() {
-    positionY = 100;
+    positionY = 300;
     velocity = 0;
     positionXGround = 0;
     positionXPipes = 300;
@@ -189,6 +198,8 @@ window.addEventListener("keydown", (e) => {
     }
 });
 function updateFPS(currentTime) {
+    console.log(gameStarted);
+    console.log(gameStarted);
     frameCount++;
     if (currentTime - lastFpsTime >= 1000) {
         fps = frameCount;
