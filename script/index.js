@@ -21,6 +21,7 @@ const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
 const mainMenu = document.getElementById("MainMenu");
 const fpsCounter = document.getElementById("fps-counter");
+const background = document.getElementById("background");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 let pipeScored = [];
@@ -146,13 +147,8 @@ function gameOver() {
     clearInterval(createPipeInterval);
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
-function MainMenu() {
-    mainMenu.style.display = "block";
-    gameover.style.display = "none";
-    clearInterval(gameLoop);
-    clearInterval(createPipeInterval);
-}
 function restartGame() {
+    background.style.display = "none";
     mainMenu.style.display = "none";
     clearInterval(createPipeInterval);
     pipeContainers.forEach(pipe => pipe.remove());
@@ -175,6 +171,7 @@ function resetVariables() {
     scoretext.innerHTML = `Score: ${score}`;
 }
 function MainMenu() {
+    background.style.display = "block";
     mainMenu.style.display = "block";
     gameover.style.display = "none";
     running = false;
@@ -183,20 +180,12 @@ function MainMenu() {
 // FPS COUNTER
 let frameCount = 0;
 let fps = 0;
-<<<<<<< HEAD
-let visiible = false;
-window.addEventListener("keydown", (e) => {
-    if (e.key.toLowerCase() === "f") {
-        visiible = !visiible;
-        fpsCounter.style.display = visiible ? "block" : "none";
-=======
 let visible = false;
 let lastFpsTime = performance.now();
 window.addEventListener("keydown", (e) => {
     if (e.key.toLowerCase() === "f") {
         visible = !visible;
         fpsCounter.style.display = visible ? "block" : "none";
->>>>>>> 8c23b175316a2342f81bd77d432f8f999ca5b19e
     }
 });
 function updateFPS(currentTime) {

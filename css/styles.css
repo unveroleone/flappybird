@@ -93,6 +93,7 @@ header{
     background-image: url("/media/floor-sprite.png");
     background-size: cover;
     background-repeat: repeat;
+    z-index: -1;
 }
 
 #ground1 {
@@ -137,7 +138,7 @@ header{
     align-items: center;
     text-align: center;
     margin: 0 auto;
-    background-color: beige;
+    background-color: #f5f5dc;
     width: 250px;
     height: 140px;
     border-radius: 20px;
@@ -148,6 +149,7 @@ header{
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
 }
 
 #MainMenu button {
@@ -165,4 +167,17 @@ header{
     transform: scale(1.05);
     background-color: black;
     color: white;
+}
+
+#background{
+    position: absolute;
+    top: -100vw;
+    left: -100vw;
+    width: 200vw;
+    height: 300vw;
+    background-color: #efefde;
+
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
 }
