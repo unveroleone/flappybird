@@ -6,6 +6,13 @@ let positionXGround = 0;
 let positionXPipes = 300;
 let speed = -900; // pixels/s
 let jumpForce = 600;
+let difficulty = "easy";
+let easyMultiplier = 1;
+let mediumMultiplier = 1.5;
+let hardMultiplier = 2;
+let originalSpawnTime = 1500;
+let lastScore = 0;
+let multiplier = 1;
 const skylevel = 0;
 const groundLevel = 555;
 let score = 0;
@@ -80,6 +87,30 @@ function update(deltaTime) {
         running = false;
         gameOver();
         return;
+    }
+    if (difficulty === "easy") {
+        multiplier = easyMultiplier;
+    }
+    else if (difficulty === "medium") {
+        multiplier = mediumMultiplier;
+    }
+    else if (difficulty === "hard") {
+        multiplier = hardMultiplier;
+    }
+    if (score === lastScore + 15 && difficulty === "easy") {
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 15;
+        speed *= 1.1;
+    }
+    else if (score === lastScore + 15 && difficulty === "medium") {
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 15;
+        speed *= 1.5;
+    }
+    else if (score === lastScore + 20 && difficulty === "hard") {
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 20;
+        speed *= 2;
     }
 }
 function gameLoopFunction(currentTime) {
