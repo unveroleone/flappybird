@@ -21,12 +21,12 @@ const scoretext = document.getElementById("score");
 const gameover = document.getElementById("gameover");
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
+const mainMenu = document.getElementById("MainMenu");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 let pipeScored = [];
 let createPipeInterval;
-createPipeInterval = setInterval(createPipe, 2300);
-let gameLoop = setInterval(update, 10);
+let gameLoop;
 // Update function
 function update() {
     // setting score
@@ -130,6 +130,7 @@ function getRandomPipeHeight(minHeight, maxHeight) {
     return Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
 }
 function createPipe() {
+    mainMenu.style.display = "none";
     const pipeStartPos = 1350;
     if (!running)
         return;
@@ -167,7 +168,11 @@ function gameOver() {
     }
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
+function MainMenu() {
+    mainMenu.style.display = "block";
+}
 function restartGame() {
+    mainMenu.style.display = "none";
     // 1. stop every interval
     clearInterval(gameLoop);
     clearInterval(createPipeInterval);
@@ -190,3 +195,5 @@ function restartGame() {
     gameLoop = setInterval(update, 10);
     createPipeInterval = setInterval(createPipe, 2300);
 }
+// FPS Counter
+const fpsCounter = document.getElementById("fps-counter");

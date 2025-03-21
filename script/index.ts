@@ -22,6 +22,7 @@ const scoretext = document.getElementById("score")!;
 const gameover = document.getElementById("gameover")!;
 const restart = document.getElementById("restart")
 const gameOverScore = document.getElementById("gameOverScore")!;
+const mainMenu = document.getElementById("MainMenu")!;
 
 
 let pipeContainers: HTMLElement[] = [];
@@ -29,10 +30,7 @@ let pipeContainerXPositions: number[] = [];
 let pipeScored: boolean[] = [];
 
 let createPipeInterval: number;
-
-
-createPipeInterval = setInterval(createPipe, 2300);
-let gameLoop = setInterval(update, 10);
+let gameLoop : number;
 
 
 // Update function
@@ -162,6 +160,7 @@ function getRandomPipeHeight(minHeight : number, maxHeight : number) {
 }
 
 function createPipe() {
+    mainMenu.style.display = "none";
     const pipeStartPos = 1350;
     if (!running) return;
 
@@ -215,8 +214,15 @@ function gameOver(){
 
 restart?.addEventListener("click", restartGame);
 
+function MainMenu(){
+    mainMenu.style.display = "block";
+    gameover.style.display = "none";
+    clearInterval(gameLoop);
+    clearInterval(createPipeInterval);
+}
 
 function restartGame() {
+    mainMenu.style.display = "none";
     // 1. stop every interval
     clearInterval(gameLoop);
     clearInterval(createPipeInterval);

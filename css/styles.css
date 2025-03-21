@@ -105,13 +105,13 @@ header{
     width: 100px;
 }
   
-  .pipe {
+.pipe {
     width: 100px;
     height: 400px;
     background-size: cover;
     position: absolute;
     z-index: -1;
-  }
+}
 
 
 .pipe-up {
@@ -123,4 +123,40 @@ header{
 .pipe-down {
     top: 600px;
     background-image: url("/media/pipe_bottom.png");
+}
+
+#MainMenu {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    background-color: beige;
+    width: 250px;
+    height: 140px;
+    border-radius: 20px;
+    color: black;
+    padding: 7px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#MainMenu button {
+    background-color: white;
+    border: solid black 1px;
+    border-radius: 10px;
+    width: 60px;
+    height: 30px;
+    transition: all ease 0.3s;
+    margin-bottom: 10px;
+}
+
+#MainMenu button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    background-color: black;
+    color: white;
 }
