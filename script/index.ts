@@ -10,6 +10,8 @@ let difficulty : string = "easy";
 let easyMultiplier : number = 1;
 let mediumMultiplier : number = 1.5;
 let hardMultiplier : number = 2;
+let originalSpawnTime : number = 1500;
+let lastScore : number = 0;
 
 let multiplier : number = 1;
 
@@ -112,6 +114,20 @@ function update(deltaTime: number): void {
         multiplier = mediumMultiplier;
     }else if(difficulty === "hard"){
         multiplier = hardMultiplier;
+    }
+
+    if(score === lastScore + 15 && difficulty === "easy"){
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 15;
+        speed *= 1.1;
+    }else if (score === lastScore + 15 && difficulty === "medium"){
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 15;
+        speed *= 1.5;
+    }else if (score === lastScore + 20 && difficulty === "hard"){
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 20;
+        speed *= 2;
     }
 }
 
@@ -271,3 +287,4 @@ function updateFPS(currentTime: number): void {
 }
 
 requestAnimationFrame(updateFPS);
+

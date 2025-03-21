@@ -17,6 +17,7 @@ body {
     z-index: -1;
 }
 
+
 header{
     text-align: end;
     margin-right: 40px;
@@ -150,6 +151,11 @@ header{
     transform: translate(-50%, -50%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1;
+    transition: all ease 0.3s;
+}
+
+#MainMenu:hover{
+    cursor: pointer;
 }
 
 #MainMenu button {
@@ -176,8 +182,7 @@ header{
     width: 200vw;
     height: 300vw;
     background-color: #efefde;
-
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     z-index: 0;
 }

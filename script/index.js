@@ -10,6 +10,11 @@ let difficulty = "easy";
 let easyMultiplier = 1;
 let mediumMultiplier = 1.5;
 let hardMultiplier = 2;
+<<<<<<< HEAD
+let originalSpawnTime = 1500;
+let lastScore = 0;
+=======
+>>>>>>> 9c665084b2cf23ff6a1561cd0fab900413c1c02f
 let multiplier = 1;
 const skylevel = 0;
 const groundLevel = 555;
@@ -98,6 +103,24 @@ function update(deltaTime) {
     else if (difficulty === "hard") {
         multiplier = hardMultiplier;
     }
+<<<<<<< HEAD
+    if (score === lastScore + 15 && difficulty === "easy") {
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 15;
+        speed *= 1.1;
+    }
+    else if (score === lastScore + 15 && difficulty === "medium") {
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 15;
+        speed *= 1.5;
+    }
+    else if (score === lastScore + 20 && difficulty === "hard") {
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        lastScore += 20;
+        speed *= 2;
+    }
+=======
+>>>>>>> 9c665084b2cf23ff6a1561cd0fab900413c1c02f
 }
 function gameLoopFunction(currentTime) {
     const deltaTime = (currentTime - lastTime) / 1000;
