@@ -1,142 +1,124 @@
-let gravity: number = 9.81;
-let velocity: number = 0;
-let positionY: number = 100; // start height in px
-let positionXGround: number = 0; // start position in px
-let positionXPipes: number = 300;
-let speed: number = -10;
-let deltaTime: number = 0.1;
-let jumpForce: number = 30;
-const skylevel: number = 0;
-const groundLevel: number = 555; // bottom height in px
-let score: number = 0;
+let gravity = 2000; // pixels/s²
+let velocity = 0;
+let positionY = 100;
+let positionXGround = 0;
+let positionXPipes = 300;
+let speed = -300; // pixels/s
+let jumpForce = 600;
 
-let running : boolean = true;
+const skylevel = 0;
+const groundLevel = 555;
+let score = 0;
+let running = true;
 
 const player = document.getElementById("player")!;
 const ground1 = document.getElementById("ground1")!;
 const ground2 = document.getElementById("ground2")!;
 const ground3 = document.getElementById("ground3")!;
 const pipes = document.getElementsByClassName("pipe");
-//const pipeholder = document.getElementById("pipe-container")!;
 const scoretext = document.getElementById("score")!;
 const gameover = document.getElementById("gameover")!;
-const restart = document.getElementById("restart")
+const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore")!;
 const mainMenu = document.getElementById("MainMenu")!;
-
+const fpsCounter = document.getElementById("fps-counter")!;
 
 let pipeContainers: HTMLElement[] = [];
 let pipeContainerXPositions: number[] = [];
 let pipeScored: boolean[] = [];
 
 let createPipeInterval: number;
-let gameLoop : number;
 
+let lastTime = performance.now();
 
-// Update function
-function update(): void {
-
-    // setting score
+function update(deltaTime: number): void {
     scoretext.innerHTML = `Score: ${score}`;
 
-    // Setting the positions
+    // Update positions
     velocity += gravity * deltaTime;
     positionY += velocity * deltaTime;
     positionXGround += speed * deltaTime;
-    positionXPipes +=speed * deltaTime;
+    positionXPipes += speed * deltaTime;
 
-    // stop game when player touches bottom of the screen
+    // Clamp to screen bounds
     if (positionY >= groundLevel) {
         positionY = groundLevel;
-        velocity = 0; 
-        console.log("Player reached bottom -- Game Over");
+        velocity = 0;
         running = false;
         gameOver();
-        clearInterval(gameLoop);
-    }
-    // stop game when player touches top of the screen
-    else if(positionY <= skylevel){
+        return;
+    } else if (positionY <= skylevel) {
         positionY = skylevel;
         velocity = 0;
-        console.log("Player reached sky -- Game Over");
         running = false;
         gameOver();
-        clearInterval(gameLoop);
+        return;
     }
 
-    //Moving player
     player.style.top = `${positionY}px`;
 
-    // set ground to startposition when it reaches end position for a "loop"
-    if(positionXGround <= -ground1.offsetWidth){
+    if (positionXGround <= -ground1.offsetWidth) {
         positionXGround = 0;
     }
-    //moving the ground
+
     ground1.style.left = `${positionXGround}px`;
-    ground2.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
-    ground3.style.left = `${positionXGround + ground1.offsetWidth-1}px`;
+    ground2.style.left = `${positionXGround + ground1.offsetWidth - 1}px`;
+    ground3.style.left = `${positionXGround + 2 * ground1.offsetWidth - 2}px`;
 
-    //Moving the test pipes
-    //pipeholder.style.left = `${positionXPipes}px`;
-    //console.log(pipeContainers);
-    
-    if (pipeContainers.length > 0) {
-        for(let i = 0; i < pipeContainers.length; i++){
-            pipeContainerXPositions[i] += speed * deltaTime;
-            let pos = pipeContainerXPositions[i];
-            pipeContainers[i].style.left = `${pos}px`;
-            if(pos <= -20 && pipeScored[i] === false){
-                pipeScored[i] = true;
-                score++;
-            }
+    // Move pipes
+    for (let i = 0; i < pipeContainers.length; i++) {
+        pipeContainerXPositions[i] += speed * deltaTime;
+        const pos = pipeContainerXPositions[i];
+        pipeContainers[i].style.left = `${pos}px`;
 
-            if(pos <= -200){
-                pipeContainers[i].remove();
-                pipeContainers.shift();
-                pipeContainerXPositions.shift();
-                pipeScored.shift();
-            }
+        if (pos <= -20 && !pipeScored[i]) {
+            pipeScored[i] = true;
+            score++;
+        }
+
+        if (pos <= -200) {
+            pipeContainers[i].remove();
+            pipeContainers.splice(i, 1);
+            pipeContainerXPositions.splice(i, 1);
+            pipeScored.splice(i, 1);
+            i--;
         }
     }
-        
-    console.log(`Position: ${positionY.toFixed(2)}px, Geschwindigkeit: ${velocity.toFixed(2)}px/s`);
-    console.log(`Position: ${positionXPipes.toFixed(2)}px`);
 
     if (isCollidingWithAny(player, pipes)) {
-        console.log("Collision detected with a pipe!");
         running = false;
         gameOver();
-        clearInterval(gameLoop);
+        return;
+    }
+}
+
+function gameLoopFunction(currentTime: number): void {
+    const deltaTime = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+
+    if (running) {
+        update(deltaTime);
+        requestAnimationFrame(gameLoopFunction);
     }
 }
 
 function Jump(): void {
-    velocity = -jumpForce; 
+    velocity = -jumpForce;
 }
-
-document.addEventListener("keydown", (event) => {
-    if (event.code === "Space") {
-        Jump();
-    }
-});
-
 
 function isCollidingWithAny(player: HTMLElement, pipes: HTMLCollectionOf<Element>): boolean {
     for (let i = 0; i < pipes.length; i++) {
         const pipe = pipes[i] as HTMLElement;
         if (isColliding(player, pipe)) {
-            return true; // Collision detected with at least one pipe
+            return true;
         }
     }
-    return false; // No collision detected
+    return false;
 }
 
 function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
-    if (!el1 || !el2) return false;
-
     const rect1 = el1.getBoundingClientRect();
     const rect2 = el2.getBoundingClientRect();
-
     const shrink = 5;
 
     return (
@@ -147,6 +129,11 @@ function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
     );
 }
 
+document.addEventListener("keydown", (event) => {
+    if (event.code === "Space") {
+        Jump();
+    }
+});
 
 document.addEventListener("wheel", function (event) {
     if (event.ctrlKey) {
@@ -154,134 +141,102 @@ document.addEventListener("wheel", function (event) {
     }
 }, { passive: false });
 
-
-function getRandomPipeHeight(minHeight : number, maxHeight : number) {
-    return Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
-}
-
 function createPipe() {
     mainMenu.style.display = "none";
-    const pipeStartPos = 1350;
     if (!running) return;
 
-    // Create a container to hold the top & bottom pipes
+    const pipeStartPos = 1350;
     const pipeContainer = document.createElement("div");
     pipeContainer.classList.add("pipe-container");
     pipeContainer.style.left = `${pipeStartPos}px`;
 
-    // Create the top and bottom pipes
     const pipeUp = document.createElement("div");
     pipeUp.classList.add("pipe", "pipe-up");
 
     const pipeDown = document.createElement("div");
     pipeDown.classList.add("pipe", "pipe-down");
 
-    // Append them to the container
     pipeContainer.appendChild(pipeUp);
     pipeContainer.appendChild(pipeDown);
 
-    // -- Instead of scaling the pipes, we move the container up or down. --
-    // We'll pick a random offset so that the "gap" is effectively at different heights.
-    const minOffset = -300;  // adjust as needed (how far up it can move)
-    const maxOffset = 0;     // adjust as needed (the highest the gap can be)
-    // For a random value between minOffset and maxOffset:
+    const minOffset = -300;
+    const maxOffset = 0;
     const randomOffset = Math.floor(Math.random() * (maxOffset - minOffset + 1)) + minOffset;
 
-    pipeContainer.style.top = `${randomOffset}px`; 
+    pipeContainer.style.top = `${randomOffset}px`;
 
-    // Finally, add this container into the DOM
     document.body.appendChild(pipeContainer);
-
-    // Keep track if you're using arrays for collision or scoring
     pipeContainers.push(pipeContainer);
     pipeContainerXPositions.push(pipeStartPos);
     pipeScored.push(false);
 }
 
-
-
-//game over
-
-
-function gameOver(){
-     if(running === false){
-        gameover.style.display = "block";
-
-        gameOverScore.innerHTML = `Your Score is: ${score}`;
-     }
+function gameOver() {
+    gameover.style.display = "block";
+    gameOverScore.innerHTML = `Your Score is: ${score}`;
+    clearInterval(createPipeInterval);
 }
-
 
 restart?.addEventListener("click", restartGame);
 
-function MainMenu(){
-    mainMenu.style.display = "block";
-    gameover.style.display = "none";
-    clearInterval(gameLoop);
-    clearInterval(createPipeInterval);
-}
-
 function restartGame() {
     mainMenu.style.display = "none";
-    // 1. stop every interval
-    clearInterval(gameLoop);
     clearInterval(createPipeInterval);
 
-    // 2. reset variables
-    positionY = 100;      // reset startheight
-    velocity = 0;         // set speed to 0
-    positionXGround = 0; 
-    positionXPipes = 300;
-    score = 0;
-    scoretext.innerHTML = `Score: ${score}`;
-    running = true;
-
-    // empty arrays and DOM-Elements
-    pipeContainers.forEach(pipe => pipe.remove()); 
+    pipeContainers.forEach(pipe => pipe.remove());
     pipeContainers = [];
     pipeContainerXPositions = [];
     pipeScored = [];
 
-    // 3. hide game over
+    resetVariables();
     gameover.style.display = "none";
 
-    // 4. start new intervals
-    gameLoop = setInterval(update, 10);
     createPipeInterval = setInterval(createPipe, 2300);
+    lastTime = performance.now();
+    requestAnimationFrame(gameLoopFunction);
 }
 
-// FPS Counter
-const fpsCounter = document.getElementById("fps-counter")!;
-
-if (!fpsCounter) {
-  throw new Error('Element mit ID "fps-counter" wurde nicht gefunden.');
+function resetVariables() {
+    positionY = 100;
+    velocity = 0;
+    positionXGround = 0;
+    positionXPipes = 300;
+    score = 0;
+    running = true;
+    scoretext.innerHTML = `Score: ${score}`;
 }
 
-let lastFrame: number = performance.now();
-let frameCount: number = 0;
-let fps: number = 0;
-let visiible: boolean = false;
+function MainMenu() {
+    mainMenu.style.display = "block";
+    gameover.style.display = "none";
+    running = false;
+    clearInterval(createPipeInterval);
+}
+
+// FPS COUNTER
+let frameCount = 0;
+let fps = 0;
+let visible = false;
+let lastFpsTime = performance.now();
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
     if (e.key.toLowerCase() === "f") {
-        visiible = !visiible;
-        fpsCounter.style.display = visiible ? "block" : "none";
+        visible = !visible;
+        fpsCounter.style.display = visible ? "block" : "none";
     }
 });
 
+function updateFPS(currentTime: number): void {
+    frameCount++;
 
-function updateFPS(): void {
-  const now = performance.now();
-  frameCount++;
+    if (currentTime - lastFpsTime >= 1000) {
+        fps = frameCount;
+        frameCount = 0;
+        lastFpsTime = currentTime;
+        fpsCounter.textContent = `FPS: ${fps}`;
+    }
 
-  if (now - lastFrame >= 1000) {
-    fps = frameCount;
-    frameCount = 0;
-    lastFrame = now;
-    fpsCounter.textContent = `FPS: ${fps}`;
-  }
-
-  requestAnimationFrame(updateFPS);
+    requestAnimationFrame(updateFPS);
 }
 
 requestAnimationFrame(updateFPS);
