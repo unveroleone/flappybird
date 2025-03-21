@@ -21,6 +21,7 @@ const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
 const mainMenu = document.getElementById("MainMenu");
 const fpsCounter = document.getElementById("fps-counter");
+const background = document.getElementById("background");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 let pipeScored = [];
@@ -147,6 +148,7 @@ function gameOver() {
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
 function restartGame() {
+    background.style.display = "none";
     mainMenu.style.display = "none";
     clearInterval(createPipeInterval);
     pipeContainers.forEach(pipe => pipe.remove());
@@ -169,6 +171,7 @@ function resetVariables() {
     scoretext.innerHTML = `Score: ${score}`;
 }
 function MainMenu() {
+    background.style.display = "block";
     mainMenu.style.display = "block";
     gameover.style.display = "none";
     running = false;

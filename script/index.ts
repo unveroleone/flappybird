@@ -22,6 +22,7 @@ const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore")!;
 const mainMenu = document.getElementById("MainMenu")!;
 const fpsCounter = document.getElementById("fps-counter")!;
+const background = document.getElementById("background")!;
 
 let pipeContainers: HTMLElement[] = [];
 let pipeContainerXPositions: number[] = [];
@@ -180,6 +181,7 @@ function gameOver() {
 restart?.addEventListener("click", restartGame);
 
 function restartGame() {
+    background.style.display = "none";
     mainMenu.style.display = "none";
     clearInterval(createPipeInterval);
 
@@ -207,6 +209,7 @@ function resetVariables() {
 }
 
 function MainMenu() {
+    background.style.display = "block";
     mainMenu.style.display = "block";
     gameover.style.display = "none";
     running = false;
