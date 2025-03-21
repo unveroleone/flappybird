@@ -87,9 +87,16 @@ function update(): void {
             pipeContainerXPositions[i] += speed * deltaTime;
             let pos = pipeContainerXPositions[i];
             pipeContainers[i].style.left = `${pos}px`;
-            if(pipeContainerXPositions[i] <= 50 && pipeScored[i] === false){
+            if(pos <= -20 && pipeScored[i] === false){
                 pipeScored[i] = true;
                 score++;
+            }
+
+            if(pos <= -200){
+                pipeContainers[i].remove();
+                pipeContainers.shift();
+                pipeContainerXPositions.shift();
+                pipeScored.shift();
             }
         }
     }
