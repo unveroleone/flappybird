@@ -101,13 +101,13 @@ header{
 }
 
 .pipe-container {
-    position: absolute; /* to allow moving it around freely */
-    width: 100px;       /* or however wide your pipe images are */
-  }
+    position: absolute;
+    width: 100px;
+}
   
   .pipe {
     width: 100px;
-    height: 400px;  /* or whatever the natural height is for your pipe image */
+    height: 400px;
     background-size: cover;
     position: absolute;
     z-index: -1;
@@ -121,6 +121,6 @@ header{
 }
 
 .pipe-down {
-    top: 600px;  /* top pipe's height (400) + gap (200) = 600 */
+    top: 600px;
     background-image: url("/media/pipe_bottom.png");
 }
