@@ -3,8 +3,15 @@ let velocity = 0;
 let positionY = 300;
 let positionXGround = 0;
 let positionXPipes = 300;
-let speed = -300; // pixels/s
+let speed = -900; // pixels/s
 let jumpForce = 600;
+
+let difficulty : string = "easy";
+let easyMultiplier : number = 1;
+let mediumMultiplier : number = 1.5;
+let hardMultiplier : number = 2;
+
+let multiplier : number = 1;
 
 const skylevel = 0;
 const groundLevel = 555;
