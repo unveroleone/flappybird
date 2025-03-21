@@ -217,6 +217,7 @@ restart?.addEventListener("click", restartGame);
 function MainMenu(){
     mainMenu.style.display = "block";
     gameover.style.display = "none";
+    resetVariable();
     clearInterval(gameLoop);
     clearInterval(createPipeInterval);
 }
@@ -228,13 +229,7 @@ function restartGame() {
     clearInterval(createPipeInterval);
 
     // 2. reset variables
-    positionY = 100;      // reset startheight
-    velocity = 0;         // set speed to 0
-    positionXGround = 0; 
-    positionXPipes = 300;
-    score = 0;
-    scoretext.innerHTML = `Score: ${score}`;
-    running = true;
+    resetVariable();
 
     // empty arrays and DOM-Elements
     pipeContainers.forEach(pipe => pipe.remove()); 
@@ -248,6 +243,16 @@ function restartGame() {
     // 4. start new intervals
     gameLoop = setInterval(update, 10);
     createPipeInterval = setInterval(createPipe, 2300);
+}
+
+function resetVariable(){
+    positionY = 100;      // reset startheight
+    velocity = 0;         // set speed to 0
+    positionXGround = 0; 
+    positionXPipes = 300;
+    score = 0;
+    scoretext.innerHTML = `Score: ${score}`;
+    running = true;
 }
 
 // FPS Counter
