@@ -4,14 +4,17 @@ let velocity = 0;
 let positionY = 300;
 let positionXGround = 0;
 let positionXPipes = 300;
-let speed = -900; // pixels/s
+let speed = -300; // pixels/s
 let jumpForce = 600;
 let difficulty = "easy";
 let easyMultiplier = 1;
 let mediumMultiplier = 1.5;
 let hardMultiplier = 2;
+<<<<<<< HEAD
 let originalSpawnTime = 1500;
 let lastScore = 0;
+=======
+>>>>>>> 9c665084b2cf23ff6a1561cd0fab900413c1c02f
 let multiplier = 1;
 const skylevel = 0;
 const groundLevel = 555;
@@ -29,6 +32,7 @@ const gameOverScore = document.getElementById("gameOverScore");
 const mainMenu = document.getElementById("MainMenu");
 const fpsCounter = document.getElementById("fps-counter");
 const background = document.getElementById("background");
+const difficultySelector = document.getElementById("difficulty");
 let pipeContainers = [];
 let pipeContainerXPositions = [];
 let pipeScored = [];
@@ -36,7 +40,9 @@ let gameStarted = false;
 let createPipeInterval;
 let lastTime = performance.now();
 function update(deltaTime) {
+    difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
+    console.log(difficulty);
     // Update positions
     if (gameStarted) {
         velocity += gravity * deltaTime;
@@ -97,6 +103,7 @@ function update(deltaTime) {
     else if (difficulty === "hard") {
         multiplier = hardMultiplier;
     }
+<<<<<<< HEAD
     if (score === lastScore + 15 && difficulty === "easy") {
         createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
         lastScore += 15;
@@ -112,6 +119,8 @@ function update(deltaTime) {
         lastScore += 20;
         speed *= 2;
     }
+=======
+>>>>>>> 9c665084b2cf23ff6a1561cd0fab900413c1c02f
 }
 function gameLoopFunction(currentTime) {
     const deltaTime = (currentTime - lastTime) / 1000;
@@ -229,8 +238,6 @@ window.addEventListener("keydown", (e) => {
     }
 });
 function updateFPS(currentTime) {
-    console.log(gameStarted);
-    console.log(gameStarted);
     frameCount++;
     if (currentTime - lastFpsTime >= 1000) {
         fps = frameCount;
