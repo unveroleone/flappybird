@@ -204,7 +204,7 @@ function restartGame() {
     resetVariables();
     gameover.style.display = "none";
 
-    createPipeInterval = setInterval(createPipe, 2300);
+    createPipeInterval = setInterval(createPipe, 1500);
     lastTime = performance.now();
     requestAnimationFrame(gameLoopFunction);
 }
