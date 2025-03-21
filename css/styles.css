@@ -11,7 +11,7 @@ body {
     width: 100%;
     height: 90vh;
     margin: 0;
-    background-image: url('/media/background_and_road.png');
+    background-image: url('https://unveroleone.github.io/flappybird/media/background_and_road.png');
     background-size: cover;
     background-position: center;
     z-index: -1;
@@ -30,7 +30,7 @@ header{
     left: 50px;
     width: 50px;
     height: 35px;
-    background-image: url("/media/flappy.png");
+    background-image: url("https://unveroleone.github.io/flappybird/media/flappy.png");
     background-size: cover;
 }
 
@@ -90,7 +90,7 @@ header{
     bottom: 0;
     width: 100%;
     height: 50px;
-    background-image: url("/media/floor-sprite.png");
+    background-image: url("https://unveroleone.github.io/flappybird/media/floor-sprite.png");
     background-size: cover;
     background-repeat: repeat;
     z-index: -1;
@@ -124,12 +124,12 @@ header{
 .pipe-up {
     top: 0;
     transform: rotate(180deg); 
-    background-image: url("/media/pipe_bottom.png");
+    background-image: url("https://unveroleone.github.io/flappybird/media/pipe_bottom.png");
 }
 
 .pipe-down {
     top: 600px;
-    background-image: url("/media/pipe_bottom.png");
+    background-image: url("https://unveroleone.github.io/flappybird/media/pipe_bottom.png");
 }
 
 #MainMenu {
