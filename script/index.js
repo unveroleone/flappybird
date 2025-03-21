@@ -170,6 +170,9 @@ function gameOver() {
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
 function MainMenu() {
     mainMenu.style.display = "block";
+    gameover.style.display = "none";
+    clearInterval(gameLoop);
+    clearInterval(createPipeInterval);
 }
 function restartGame() {
     mainMenu.style.display = "none";
@@ -203,9 +206,9 @@ if (!fpsCounter) {
 let lastFrame = performance.now();
 let frameCount = 0;
 let fps = 0;
-let visiible = true;
+let visiible = false;
 window.addEventListener("keydown", (e) => {
-    if (e.key.toLowerCase() === "r") {
+    if (e.key.toLowerCase() === "f") {
         visiible = !visiible;
         fpsCounter.style.display = visiible ? "block" : "none";
     }
