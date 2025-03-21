@@ -103,6 +103,14 @@ function update(deltaTime: number): void {
         gameOver();
         return;
     }
+
+    if(difficulty === "easy"){
+        multiplier = easyMultiplier;
+    } else if(difficulty === "medium"){
+        multiplier = mediumMultiplier;
+    }else if(difficulty === "hard"){
+        multiplier = hardMultiplier;
+    }
 }
 
 function gameLoopFunction(currentTime: number): void {
