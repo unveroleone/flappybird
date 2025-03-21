@@ -288,3 +288,12 @@ function updateFPS(currentTime: number): void {
 
 requestAnimationFrame(updateFPS);
 
+const difficultySelect = document.getElementById("difficulty")!;
+const difficultyDisplay = document.getElementById("difficulty-selection")!;
+
+difficultyDisplay.textContent = `Difficulty: ${(difficultySelect as HTMLSelectElement).value}`;
+
+difficultySelect.addEventListener("change", () => {
+    const selected = (difficultySelect as HTMLSelectElement).value;
+    difficultyDisplay.textContent = `Difficulty: ${selected}`;
+});
