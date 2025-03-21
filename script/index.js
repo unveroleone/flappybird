@@ -190,3 +190,30 @@ function restartGame() {
     gameLoop = setInterval(update, 10);
     createPipeInterval = setInterval(createPipe, 2300);
 }
+// FPS Counter
+const fpsCounter = document.getElementById("fps-counter");
+if (!fpsCounter) {
+    throw new Error('Element mit ID "fps-counter" wurde nicht gefunden.');
+}
+let lastFrame = performance.now();
+let frameCount = 0;
+let fps = 0;
+let visiible = true;
+window.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() === "r") {
+        visiible = !visiible;
+        fpsCounter.style.display = visiible ? "block" : "none";
+    }
+});
+function updateFPS() {
+    const now = performance.now();
+    frameCount++;
+    if (now - lastFrame >= 1000) {
+        fps = frameCount;
+        frameCount = 0;
+        lastFrame = now;
+        fpsCounter.textContent = `FPS: ${fps}`;
+    }
+    requestAnimationFrame(updateFPS);
+}
+requestAnimationFrame(updateFPS);
