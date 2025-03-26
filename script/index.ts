@@ -19,6 +19,7 @@ let multiplier : number = 1;
 const skylevel = 0;
 const groundLevel = 555;
 let score = 0;
+let highscore = 0;
 let running = true;
 
 const player = document.getElementById("player")!;
@@ -29,6 +30,7 @@ const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score")!;
 const difficultyText = document.getElementById("difficulty-selection")!;
 const gameover = document.getElementById("gameover")!;
+const highscoreEl = document.getElementById("highscore")!;
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore")!;
 const mainMenu = document.getElementById("MainMenu")!;
@@ -46,6 +48,39 @@ let gameStarted : boolean = false;
 let createPipeInterval: number;
 
 let lastTime = performance.now();
+
+function loadHighscore():void {
+    const stored = localStorage.getItem("highscore");
+    highscore = stored ? parseInt(stored) : 0;
+    updateHighscoreDisplay();
+}
+
+function updateHighscoreDisplay():void {
+    const highscoreEl = document.getElementById("highscore");
+    if (highscoreEl) {
+        highscoreEl.textContent = `Highscore: ${highscore}`;
+    }
+}
+
+function updateScoreDisplay(): void {
+    const scoreEl = document.getElementById("score");
+    if (scoreEl) {
+        scoreEl.textContent = `Score: ${score}`;
+    }
+}
+
+function increaseScore(amount: number = 1): void {
+    score += amount;
+    updateScoreDisplay();
+
+    if (score > highscore) {
+        highscore = score;
+        localStorage.setItem("highscore", highscore.toString());
+        updateHighscoreDisplay();
+    }
+}
+loadHighscore();
+updateScoreDisplay();
 
 function update(deltaTime: number): void {
     difficulty = difficultySelector.value; 
@@ -229,6 +264,7 @@ function gameOver() {
     }else{
         gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
     }
+    highscoreEl.innerHTML = `Highscore: ${score}`;
     clearInterval(createPipeInterval);
 }
 

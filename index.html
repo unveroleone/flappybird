@@ -11,15 +11,18 @@
     <link rel="manifest" href="favicon/site.webmanifest">
 </head>
 <header>
-    <h2 id="score">Score: unlimited</h2>
-    <div id="fps-counter">FPS: 0</div>
-    <div id="difficulty-selection">Diffulty:</div>
-</header>
+    <div id="difficulty-selection">Difficulty: Medium</div>
+    <div id="score-difficulty-wrapper">
+      <h2 id="score">Score: unlimited</h2>
+      <div id="fps-counter">FPS: 0</div>
+    </div>
+  </header>   
 <body>
     <div id="player"></div>
     <div id="gameover">
         <h2>Game Over!</h2>
         <p id="gameOverScore">Your Score is: </p>
+        <p id="highscore">Your Highscore: 0</p>
         <button id="restart" onclick="restartGame()">Restart</button>
         <button id="menu" onclick="MainMenu()">Menu</button>
     </div>

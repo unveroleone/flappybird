@@ -17,6 +17,7 @@ let multiplier = 1;
 const skylevel = 0;
 const groundLevel = 555;
 let score = 0;
+let highscore = 0;
 let running = true;
 const player = document.getElementById("player");
 const ground1 = document.getElementById("ground1");
@@ -26,6 +27,7 @@ const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score");
 const difficultyText = document.getElementById("difficulty-selection");
 const gameover = document.getElementById("gameover");
+const highscoreEl = document.getElementById("highscore");
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
 const mainMenu = document.getElementById("MainMenu");
@@ -38,6 +40,34 @@ let pipeScored = [];
 let gameStarted = false;
 let createPipeInterval;
 let lastTime = performance.now();
+function loadHighscore() {
+    const stored = localStorage.getItem("highscore");
+    highscore = stored ? parseInt(stored) : 0;
+    updateHighscoreDisplay();
+}
+function updateHighscoreDisplay() {
+    const highscoreEl = document.getElementById("highscore");
+    if (highscoreEl) {
+        highscoreEl.textContent = `Highscore: ${highscore}`;
+    }
+}
+function updateScoreDisplay() {
+    const scoreEl = document.getElementById("score");
+    if (scoreEl) {
+        scoreEl.textContent = `Score: ${score}`;
+    }
+}
+function increaseScore(amount = 1) {
+    score += amount;
+    updateScoreDisplay();
+    if (score > highscore) {
+        highscore = score;
+        localStorage.setItem("highscore", highscore.toString());
+        updateHighscoreDisplay();
+    }
+}
+loadHighscore();
+updateScoreDisplay();
 function update(deltaTime) {
     difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
@@ -105,21 +135,21 @@ function update(deltaTime) {
     }
     if (score === lastScore + 15 && difficulty === "Easy") {
         clearInterval(createPipeInterval);
+        speed *= 1.1;
         createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 15;
-        speed *= 1.1;
     }
     else if (score === lastScore + 15 && difficulty === "Medium") {
         clearInterval(createPipeInterval);
+        speed *= 1.5;
         createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 15;
-        speed *= 1.5;
     }
     else if (score === lastScore + 5 && difficulty === "Hard") {
         clearInterval(createPipeInterval);
+        speed *= 2;
         createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 5;
-        speed *= 2;
     }
 }
 function gameLoopFunction(currentTime) {
@@ -198,6 +228,7 @@ function gameOver() {
     else {
         gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
     }
+    highscoreEl.innerHTML = `Highscore: ${score}`;
     clearInterval(createPipeInterval);
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);

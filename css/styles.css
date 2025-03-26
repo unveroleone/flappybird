@@ -1,6 +1,5 @@
 html, body {
     touch-action: pan-x pan-y;
-    user-scalable: no;
     overscroll-behavior: contain;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -17,12 +16,42 @@ body {
     z-index: -1;
 }
 
-
-header{
-    text-align: end;
-    margin-right: 40px;
+header {
+    position: absolute;
+    width: 100%;
+    top: 10px;
+    left: 0;
     color: white;
-    font-size: 300;
+    font-family: Arial, sans-serif;
+    pointer-events: none;
+}
+
+#difficulty-selection {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+#score-difficulty-wrapper {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+#score {
+    font-size: 20px;
+    margin: 0;
+}
+
+#fps-counter {
+    font-size: 16px;
 }
 
 #player {
@@ -48,8 +77,8 @@ header{
     text-align: center;
     margin: 0 auto;
     background-color: beige;
-    width: 250px;
-    height: 140px;
+    width: 350px;
+    height: 200px;
     border-radius: 20px;
     color: black;
     padding: 7px;
