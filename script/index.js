@@ -103,19 +103,19 @@ function update(deltaTime) {
     }
     if (score === lastScore + 15 && difficulty === "Easy") {
         clearInterval(createPipeInterval);
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 15;
         speed *= 1.1;
     }
     else if (score === lastScore + 15 && difficulty === "Medium") {
         clearInterval(createPipeInterval);
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 15;
         speed *= 1.5;
     }
     else if (score === lastScore + 5 && difficulty === "Hard") {
         clearInterval(createPipeInterval);
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier * 5);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 5;
         speed *= 2;
     }
@@ -190,7 +190,12 @@ function createPipe() {
 function gameOver() {
     gameStarted = false;
     gameover.style.display = "block";
-    gameOverScore.innerHTML = `Your Score is: ${score}`;
+    if (score > 25) {
+        gameOverScore.innerHTML = `Your Score is: ${score}! You are a pro!`;
+    }
+    else {
+        gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
+    }
     clearInterval(createPipeInterval);
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
@@ -248,3 +253,12 @@ function updateFPS(currentTime) {
     requestAnimationFrame(updateFPS);
 }
 requestAnimationFrame(updateFPS);
+const difficultySelect = document.getElementById("difficulty");
+const difficultyDisplay = document.getElementById("difficulty-selection");
+if (difficultySelect && difficultyDisplay) {
+    difficultyDisplay.textContent = `Difficulty: ${difficultySelect.value}`;
+    difficultySelect.addEventListener("change", () => {
+        const selected = difficultySelect.value;
+        difficultyDisplay.textContent = `Difficulty: ${selected}`;
+    });
+}
