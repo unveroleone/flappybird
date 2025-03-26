@@ -41,14 +41,18 @@ let gameStarted = false;
 let createPipeInterval;
 let lastTime = performance.now();
 function loadHighscore() {
-    const stored = localStorage.getItem("highscore");
+    const stored = localStorage.getItem(getHighscoreKey());
     highscore = stored ? parseInt(stored) : 0;
     updateHighscoreDisplay();
+}
+function getHighscoreKey() {
+    const currentDifficulty = difficultySelector.value.toLowerCase();
+    return `highscore_${currentDifficulty}`;
 }
 function updateHighscoreDisplay() {
     const highscoreEl = document.getElementById("highscore");
     if (highscoreEl) {
-        highscoreEl.textContent = `Highscore: ${highscore}`;
+        highscoreEl.textContent = `Highscore (${difficulty}): ${highscore}`;
     }
 }
 function updateScoreDisplay() {
@@ -62,10 +66,19 @@ function increaseScore(amount = 1) {
     updateScoreDisplay();
     if (score > highscore) {
         highscore = score;
-        localStorage.setItem("highscore", highscore.toString());
+        localStorage.setItem(getHighscoreKey(), highscore.toString());
         updateHighscoreDisplay();
     }
 }
+function updateHighscoreMenu() {
+    const easy = localStorage.getItem("highscore_easy") || "0";
+    const medium = localStorage.getItem("highscore_medium") || "0";
+    const hard = localStorage.getItem("highscore_hard") || "0";
+    document.getElementById("highscore-easy").textContent = `Easy: ${easy}`;
+    document.getElementById("highscore-medium").textContent = `Medium: ${medium}`;
+    document.getElementById("highscore-hard").textContent = `Hard: ${hard}`;
+}
+difficulty = difficultySelector.value;
 loadHighscore();
 updateScoreDisplay();
 function update(deltaTime) {
@@ -109,7 +122,7 @@ function update(deltaTime) {
         pipeContainers[i].style.left = `${pos}px`;
         if (pos <= -20 && !pipeScored[i]) {
             pipeScored[i] = true;
-            score++;
+            increaseScore();
         }
         if (pos <= -200) {
             pipeContainers[i].remove();
@@ -136,19 +149,19 @@ function update(deltaTime) {
     if (score === lastScore + 15 && difficulty === "Easy") {
         clearInterval(createPipeInterval);
         speed *= 1.1;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 15;
     }
     else if (score === lastScore + 15 && difficulty === "Medium") {
         clearInterval(createPipeInterval);
         speed *= 1.5;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 15;
     }
     else if (score === lastScore + 5 && difficulty === "Hard") {
         clearInterval(createPipeInterval);
         speed *= 2;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 5;
     }
 }
@@ -228,8 +241,9 @@ function gameOver() {
     else {
         gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
     }
-    highscoreEl.innerHTML = `Highscore: ${score}`;
+    highscoreEl.textContent = `Highscore (${difficulty}): ${highscore}`;
     clearInterval(createPipeInterval);
+    updateHighscoreMenu();
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
 function restartGame() {
@@ -292,6 +306,8 @@ if (difficultySelect && difficultyDisplay) {
     difficultyDisplay.textContent = `Difficulty: ${difficultySelect.value}`;
     difficultySelect.addEventListener("change", () => {
         const selected = difficultySelect.value;
+        difficulty = selected;
         difficultyDisplay.textContent = `Difficulty: ${selected}`;
+        loadHighscore();
     });
 }

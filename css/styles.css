@@ -70,6 +70,12 @@ header {
     font-weight: 700;
 }
 
+#highscore-menu {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
 #gameover {
     display: none;
     justify-content: center;
@@ -77,8 +83,8 @@ header {
     text-align: center;
     margin: 0 auto;
     background-color: beige;
-    width: 350px;
-    height: 200px;
+    width: 450px;
+    height: 300px;
     border-radius: 20px;
     color: black;
     padding: 7px;
