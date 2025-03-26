@@ -24,6 +24,7 @@ const ground2 = document.getElementById("ground2");
 const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score");
+const difficultyText = document.getElementById("difficulty-selection");
 const gameover = document.getElementById("gameover");
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
@@ -40,6 +41,7 @@ let lastTime = performance.now();
 function update(deltaTime) {
     difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
+    difficultyText.innerHTML = `Difficulty: ${difficulty}`;
     console.log(difficulty);
     // Update positions
     if (gameStarted) {
