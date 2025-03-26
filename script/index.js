@@ -24,6 +24,7 @@ const ground2 = document.getElementById("ground2");
 const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score");
+const difficultyText = document.getElementById("difficulty-selection");
 const gameover = document.getElementById("gameover");
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
@@ -40,6 +41,7 @@ let lastTime = performance.now();
 function update(deltaTime) {
     difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
+    difficultyText.innerHTML = `Difficulty: ${difficulty}`;
     console.log(difficulty);
     // Update positions
     if (gameStarted) {
@@ -190,7 +192,12 @@ function createPipe() {
 function gameOver() {
     gameStarted = false;
     gameover.style.display = "block";
-    gameOverScore.innerHTML = `Your Score is: ${score}`;
+    if (score > 25) {
+        gameOverScore.innerHTML = `Your Score is: ${score}! You are a pro!`;
+    }
+    else {
+        gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
+    }
     clearInterval(createPipeInterval);
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
@@ -248,3 +255,12 @@ function updateFPS(currentTime) {
     requestAnimationFrame(updateFPS);
 }
 requestAnimationFrame(updateFPS);
+const difficultySelect = document.getElementById("difficulty");
+const difficultyDisplay = document.getElementById("difficulty-selection");
+if (difficultySelect && difficultyDisplay) {
+    difficultyDisplay.textContent = `Difficulty: ${difficultySelect.value}`;
+    difficultySelect.addEventListener("change", () => {
+        const selected = difficultySelect.value;
+        difficultyDisplay.textContent = `Difficulty: ${selected}`;
+    });
+}
