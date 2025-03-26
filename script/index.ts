@@ -222,7 +222,11 @@ function createPipe() {
 function gameOver() {
     gameStarted = false;
     gameover.style.display = "block";
-    gameOverScore.innerHTML = `Your Score is: ${score}`;
+    if(score > 25){
+        gameOverScore.innerHTML = `Your Score is: ${score}! You are a pro!`;
+    }else{
+        gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
+    }
     clearInterval(createPipeInterval);
 }
 
@@ -294,12 +298,14 @@ function updateFPS(currentTime: number): void {
 
 requestAnimationFrame(updateFPS);
 
-const difficultySelect = document.getElementById("difficulty")!;
-const difficultyDisplay = document.getElementById("difficulty-selection")!;
+const difficultySelect = document.getElementById("difficulty");
+const difficultyDisplay = document.getElementById("difficulty-selection");
 
-difficultyDisplay.textContent = `Difficulty: ${(difficultySelect as HTMLSelectElement).value}`;
+if (difficultySelect && difficultyDisplay) {
+    difficultyDisplay.textContent = `Difficulty: ${(difficultySelect as HTMLSelectElement).value}`;
 
-difficultySelect.addEventListener("change", () => {
-    const selected = (difficultySelect as HTMLSelectElement).value;
-    difficultyDisplay.textContent = `Difficulty: ${selected}`;
-});
+    difficultySelect.addEventListener("change", () => {
+        const selected = (difficultySelect as HTMLSelectElement).value;
+        difficultyDisplay.textContent = `Difficulty: ${selected}`;
+    });
+}
