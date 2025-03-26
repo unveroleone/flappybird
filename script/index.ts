@@ -157,17 +157,17 @@ function update(deltaTime: number): void {
     if(score === lastScore + 15 && difficulty === "Easy"){
         clearInterval(createPipeInterval);
         speed *= 1.1;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed*15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 15;
     }else if (score === lastScore + 15 && difficulty === "Medium"){
         clearInterval(createPipeInterval);  
         speed *= 1.5;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed*15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 15;  
     }else if (score === lastScore + 5 && difficulty === "Hard"){
         clearInterval(createPipeInterval);
         speed *= 2;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 5;
     }
 }
