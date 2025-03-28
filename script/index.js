@@ -24,7 +24,6 @@ const ground2 = document.getElementById("ground2");
 const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score");
-const difficultyText = document.getElementById("difficulty-selection");
 const gameover = document.getElementById("gameover");
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
@@ -41,7 +40,6 @@ let lastTime = performance.now();
 function update(deltaTime) {
     difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
-    difficultyText.innerHTML = `Difficulty: ${difficulty}`;
     console.log(difficulty);
     // Update positions
     if (gameStarted) {
@@ -105,21 +103,21 @@ function update(deltaTime) {
     }
     if (score === lastScore + 15 && difficulty === "Easy") {
         clearInterval(createPipeInterval);
-        speed *= 1.1;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 5);
         lastScore += 15;
+        speed *= 1.1;
     }
     else if (score === lastScore + 15 && difficulty === "Medium") {
         clearInterval(createPipeInterval);
-        speed *= 1.5;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 10);
         lastScore += 15;
+        speed *= 1.5;
     }
     else if (score === lastScore + 5 && difficulty === "Hard") {
         clearInterval(createPipeInterval);
-        speed *= 2;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 5;
+        speed *= 2;
     }
 }
 function gameLoopFunction(currentTime) {

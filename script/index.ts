@@ -27,7 +27,6 @@ const ground2 = document.getElementById("ground2")!;
 const ground3 = document.getElementById("ground3")!;
 const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score")!;
-const difficultyText = document.getElementById("difficulty-selection")!;
 const gameover = document.getElementById("gameover")!;
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore")!;
@@ -50,7 +49,6 @@ let lastTime = performance.now();
 function update(deltaTime: number): void {
     difficulty = difficultySelector.value; 
     scoretext.innerHTML = `Score: ${score}`;
-    difficultyText.innerHTML = `Difficulty: ${difficulty}`;
     console.log(difficulty);
     // Update positions
     if(gameStarted){
@@ -111,6 +109,7 @@ function update(deltaTime: number): void {
         return;
     }
 
+    // check difficulty
     if(difficulty === "easy"){
         multiplier = easyMultiplier;
     } else if(difficulty === "medium"){
@@ -119,24 +118,27 @@ function update(deltaTime: number): void {
         multiplier = hardMultiplier;
     }
 
+    //adjust speed and pipe spawn time
+
     if(score === lastScore + 15 && difficulty === "Easy"){
         clearInterval(createPipeInterval);
-        speed *= 1.1;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed*5);
         lastScore += 15;
+        speed *= 1.1;
     }else if (score === lastScore + 15 && difficulty === "Medium"){
-        clearInterval(createPipeInterval);  
+        clearInterval(createPipeInterval);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed*10);
+        lastScore += 15;
         speed *= 1.5;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
-        lastScore += 15;  
     }else if (score === lastScore + 5 && difficulty === "Hard"){
         clearInterval(createPipeInterval);
-        speed *= 2;
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
         lastScore += 5;
+        speed *= 2;
     }
 }
 
+//manage update function with delta time
 function gameLoopFunction(currentTime: number): void {
     const deltaTime = (currentTime - lastTime) / 1000;
     lastTime = currentTime;
@@ -151,6 +153,7 @@ function Jump(): void {
     velocity = -jumpForce;
 }
 
+//checking if player is colliding with any pipe
 function isCollidingWithAny(player: HTMLElement, pipes: HTMLCollectionOf<Element>): boolean {
     for (let i = 0; i < pipes.length; i++) {
         const pipe = pipes[i] as HTMLElement;
@@ -161,6 +164,7 @@ function isCollidingWithAny(player: HTMLElement, pipes: HTMLCollectionOf<Element
     return false;
 }
 
+//checking if 2 objects are colliding
 function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
     const rect1 = el1.getBoundingClientRect();
     const rect2 = el2.getBoundingClientRect();
@@ -174,22 +178,32 @@ function isColliding(el1: HTMLElement, el2: HTMLElement): boolean {
     );
 }
 
+//keylistener for keys pressed
 document.addEventListener("keydown", (event) => {
 
+    //listener for jumping
     if (event.code === "Space") {
         if(!gameStarted){
             gameStarted = true;
         }
         Jump();
     }
+
+    // fps counter activate or deactivate
+    if (event.key.toLowerCase() === "f") {
+        visible = !visible;
+        fpsCounter.style.display = visible ? "block" : "none";
+    }
 });
 
+// keylistener for mwheel
 document.addEventListener("wheel", function (event) {
     if (event.ctrlKey) {
         event.preventDefault();
     }
 }, { passive: false });
 
+//function to create pipes
 function createPipe() {
     mainMenu.style.display = "none";
     if (!running) return;
@@ -221,6 +235,7 @@ function createPipe() {
     pipeScored.push(false);
 }
 
+//function to switch to gameOver screen
 function gameOver() {
     gameStarted = false;
     gameover.style.display = "block";
@@ -234,6 +249,7 @@ function gameOver() {
 
 restart?.addEventListener("click", restartGame);
 
+//restart game (reset every variable/position etc.)
 function restartGame() {
     multiplier = 1;
     speed = originalSpeed;
@@ -254,6 +270,7 @@ function restartGame() {
     requestAnimationFrame(gameLoopFunction);
 }
 
+//reset every variable
 function resetVariables() {
     positionY = 300;
     velocity = 0;
@@ -264,6 +281,7 @@ function resetVariables() {
     scoretext.innerHTML = `Score: ${score}`;
 }
 
+//function to switch to gameover screen
 function MainMenu() {
     background.style.display = "block";
     mainMenu.style.display = "block";
@@ -278,13 +296,7 @@ let fps = 0;
 let visible = false;
 let lastFpsTime = performance.now();
 
-window.addEventListener("keydown", (e: KeyboardEvent) => {
-    if (e.key.toLowerCase() === "f") {
-        visible = !visible;
-        fpsCounter.style.display = visible ? "block" : "none";
-    }
-});
-
+//function to update fps counter
 function updateFPS(currentTime: number): void {
     frameCount++;
 
@@ -300,6 +312,7 @@ function updateFPS(currentTime: number): void {
 
 requestAnimationFrame(updateFPS);
 
+//function to select difficulty in main menu screen
 const difficultySelect = document.getElementById("difficulty");
 const difficultyDisplay = document.getElementById("difficulty-selection");
 
