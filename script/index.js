@@ -17,6 +17,7 @@ let multiplier = 1;
 const skylevel = 0;
 const groundLevel = 555;
 let score = 0;
+let highscore = 0;
 let running = true;
 const player = document.getElementById("player");
 const ground1 = document.getElementById("ground1");
@@ -25,6 +26,7 @@ const ground3 = document.getElementById("ground3");
 const pipes = document.getElementsByClassName("pipe");
 const scoretext = document.getElementById("score");
 const gameover = document.getElementById("gameover");
+const highscoreEl = document.getElementById("highscore");
 const restart = document.getElementById("restart");
 const gameOverScore = document.getElementById("gameOverScore");
 const mainMenu = document.getElementById("MainMenu");
@@ -37,6 +39,47 @@ let pipeScored = [];
 let gameStarted = false;
 let createPipeInterval;
 let lastTime = performance.now();
+function loadHighscore() {
+    const stored = localStorage.getItem(getHighscoreKey());
+    highscore = stored ? parseInt(stored) : 0;
+    updateHighscoreDisplay();
+}
+function getHighscoreKey() {
+    const currentDifficulty = difficultySelector.value.toLowerCase();
+    return `highscore_${currentDifficulty}`;
+}
+function updateHighscoreDisplay() {
+    const highscoreEl = document.getElementById("highscore");
+    if (highscoreEl) {
+        highscoreEl.textContent = `Highscore (${difficulty}): ${highscore}`;
+    }
+}
+function updateScoreDisplay() {
+    const scoreEl = document.getElementById("score");
+    if (scoreEl) {
+        scoreEl.textContent = `Score: ${score}`;
+    }
+}
+function increaseScore(amount = 1) {
+    score += amount;
+    updateScoreDisplay();
+    if (score > highscore) {
+        highscore = score;
+        localStorage.setItem(getHighscoreKey(), highscore.toString());
+        updateHighscoreDisplay();
+    }
+}
+function updateHighscoreMenu() {
+    const easy = localStorage.getItem("highscore_easy") || "0";
+    const medium = localStorage.getItem("highscore_medium") || "0";
+    const hard = localStorage.getItem("highscore_hard") || "0";
+    document.getElementById("highscore-easy").textContent = `Easy: ${easy}`;
+    document.getElementById("highscore-medium").textContent = `Medium: ${medium}`;
+    document.getElementById("highscore-hard").textContent = `Hard: ${hard}`;
+}
+difficulty = difficultySelector.value;
+loadHighscore();
+updateScoreDisplay();
 function update(deltaTime) {
     difficulty = difficultySelector.value;
     scoretext.innerHTML = `Score: ${score}`;
@@ -77,7 +120,7 @@ function update(deltaTime) {
         pipeContainers[i].style.left = `${pos}px`;
         if (pos <= -20 && !pipeScored[i]) {
             pipeScored[i] = true;
-            score++;
+            increaseScore();
         }
         if (pos <= -200) {
             pipeContainers[i].remove();
@@ -196,7 +239,9 @@ function gameOver() {
     else {
         gameOverScore.innerHTML = `Your Score is: ${score}. You can do better!`;
     }
+    highscoreEl.textContent = `Highscore (${difficulty}): ${highscore}`;
     clearInterval(createPipeInterval);
+    updateHighscoreMenu();
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
 function restartGame() {
@@ -259,6 +304,8 @@ if (difficultySelect && difficultyDisplay) {
     difficultyDisplay.textContent = `Difficulty: ${difficultySelect.value}`;
     difficultySelect.addEventListener("change", () => {
         const selected = difficultySelect.value;
+        difficulty = selected;
         difficultyDisplay.textContent = `Difficulty: ${selected}`;
+        loadHighscore();
     });
 }
