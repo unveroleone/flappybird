@@ -135,6 +135,7 @@ function update(deltaTime) {
         gameOver();
         return;
     }
+    // check difficulty
     if (difficulty === "easy") {
         multiplier = easyMultiplier;
     }
@@ -144,25 +145,27 @@ function update(deltaTime) {
     else if (difficulty === "hard") {
         multiplier = hardMultiplier;
     }
+    //adjust speed and pipe spawn time
     if (score === lastScore + 15 && difficulty === "Easy") {
         clearInterval(createPipeInterval);
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 5);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 15;
         speed *= 1.1;
     }
     else if (score === lastScore + 15 && difficulty === "Medium") {
         clearInterval(createPipeInterval);
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 10);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 15;
         speed *= 1.5;
     }
     else if (score === lastScore + 5 && difficulty === "Hard") {
         clearInterval(createPipeInterval);
-        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed * 15);
+        createPipeInterval = setInterval(createPipe, originalSpawnTime * multiplier + speed);
         lastScore += 5;
         speed *= 2;
     }
 }
+//manage update function with delta time
 function gameLoopFunction(currentTime) {
     const deltaTime = (currentTime - lastTime) / 1000;
     lastTime = currentTime;
@@ -174,6 +177,7 @@ function gameLoopFunction(currentTime) {
 function Jump() {
     velocity = -jumpForce;
 }
+//checking if player is colliding with any pipe
 function isCollidingWithAny(player, pipes) {
     for (let i = 0; i < pipes.length; i++) {
         const pipe = pipes[i];
@@ -183,6 +187,7 @@ function isCollidingWithAny(player, pipes) {
     }
     return false;
 }
+//checking if 2 objects are colliding
 function isColliding(el1, el2) {
     const rect1 = el1.getBoundingClientRect();
     const rect2 = el2.getBoundingClientRect();
@@ -192,19 +197,28 @@ function isColliding(el1, el2) {
         rect1.top + shrink < rect2.bottom - shrink &&
         rect1.bottom - shrink > rect2.top + shrink);
 }
+//keylistener for keys pressed
 document.addEventListener("keydown", (event) => {
+    //listener for jumping
     if (event.code === "Space") {
         if (!gameStarted) {
             gameStarted = true;
         }
         Jump();
     }
+    // fps counter activate or deactivate
+    if (event.key.toLowerCase() === "f") {
+        visible = !visible;
+        fpsCounter.style.display = visible ? "block" : "none";
+    }
 });
+// keylistener for mwheel
 document.addEventListener("wheel", function (event) {
     if (event.ctrlKey) {
         event.preventDefault();
     }
 }, { passive: false });
+//function to create pipes
 function createPipe() {
     mainMenu.style.display = "none";
     if (!running)
@@ -230,6 +244,7 @@ function createPipe() {
     pipeContainerXPositions.push(pipeStartPos);
     pipeScored.push(false);
 }
+//function to switch to gameOver screen
 function gameOver() {
     gameStarted = false;
     gameover.style.display = "block";
@@ -244,6 +259,7 @@ function gameOver() {
     updateHighscoreMenu();
 }
 restart === null || restart === void 0 ? void 0 : restart.addEventListener("click", restartGame);
+//restart game (reset every variable/position etc.)
 function restartGame() {
     multiplier = 1;
     speed = originalSpeed;
@@ -260,6 +276,7 @@ function restartGame() {
     lastTime = performance.now();
     requestAnimationFrame(gameLoopFunction);
 }
+//reset every variable
 function resetVariables() {
     positionY = 300;
     velocity = 0;
@@ -269,6 +286,7 @@ function resetVariables() {
     running = true;
     scoretext.innerHTML = `Score: ${score}`;
 }
+//function to switch to gameover screen
 function MainMenu() {
     background.style.display = "block";
     mainMenu.style.display = "block";
@@ -281,12 +299,7 @@ let frameCount = 0;
 let fps = 0;
 let visible = false;
 let lastFpsTime = performance.now();
-window.addEventListener("keydown", (e) => {
-    if (e.key.toLowerCase() === "f") {
-        visible = !visible;
-        fpsCounter.style.display = visible ? "block" : "none";
-    }
-});
+//function to update fps counter
 function updateFPS(currentTime) {
     frameCount++;
     if (currentTime - lastFpsTime >= 1000) {
@@ -298,6 +311,7 @@ function updateFPS(currentTime) {
     requestAnimationFrame(updateFPS);
 }
 requestAnimationFrame(updateFPS);
+//function to select difficulty in main menu screen
 const difficultySelect = document.getElementById("difficulty");
 const difficultyDisplay = document.getElementById("difficulty-selection");
 if (difficultySelect && difficultyDisplay) {
